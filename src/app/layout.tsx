@@ -134,7 +134,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
         <Analytics />
         <SpeedInsights />
       </body>

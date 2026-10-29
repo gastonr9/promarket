@@ -63,12 +63,12 @@
   --paper: #f6f7f1;
   --white: #fff;
   --ink: #17243b;
-  --muted-text: #4a5361;     /* Darkened for WCAG AA contrast on paper/white */
+  --muted-text: #374151;     /* Darkened further for strict WCAG AA contrast (Gray 700) */
   --line: #e1e5dd;
   --coral: #f15b42;
   --coral-dark: #d94731;
-  --lime: #a3bd2d;           /* Darkened for WCAG AA on paper/white (was #c4e04f) */
-  --lime-dark: #8a9f26;
+  --lime: #7a931e;           /* Darkened for strict WCAG AA on paper/white (was #a3bd2d) */
+  --lime-dark: #667a18;
   --blue: #244d78;
   --mint: #dcead8;           /* Light mint for subtle backgrounds */
   --mint-dark: #c8d8c4;      /* Darker mint for better contrast */

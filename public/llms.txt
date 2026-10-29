@@ -1,32 +1,45 @@
 # Promarket Logística
 
-Distribucción y abastecimiento mayorista para kioscos, almacenes y comercios de cercanía en Argentina.
+Distribución y abastecimiento mayorista para kioscos, almacenes y comercios de cercanía en Argentina.
 
-## Catálogo principal
-/catalogo
+## Resumen
 
-## Productos destacados
-/catalogo/gaseosa-cola
-/catalogo/papas-clasicas
-/catalogo/alfajor-triple
-/catalogo/pasta-dental
-/catalogo/caramelos-surtidos
-/catalogo/chocolate-tableta
-/catalogo/galletitas-dulces
-/catalogo/yerba-mate
-/catalogo/agua-mineral
-/catalogo/mani-salado
-/catalogo/arroz-largo-fino
-/catalogo/chicles
+Promarket Logística ofrece un catálogo digital mayorista donde los comerciantes consultan precios, stock y disponibilidad de entrega directamente por WhatsApp. Sin carrito de compra ni pagos online: el flujo es catálogo → WhatsApp → coordinación comercial.
 
-## Cómo comprar
-/#como-comprar
+## Archivos de referencia
 
-## Contacto y WhatsApp
-/#contacto
+- **Catálogo completo (IA)**: [/api/llms-full.txt](/api/llms-full.txt) — Lista dinámica de todos los productos activos con precios, categorías y marcas.
+- **Sitemap**: [/sitemap.xml](/sitemap.xml) — URLs indexables con `lastmod`.
+- **Robots**: [/robots.txt](/robots.txt) — Directivas para crawlers.
+
+## Navegación principal
+
+- **Catálogo completo**: [/catalogo](/catalogo) — Filtros por categoría y búsqueda, URLs compartibles (`?category=bebidas&q=cola`).
+- **Detalle de producto**: `/catalogo/[slug]` — Ficha con imagen, descripción, precio, presentación, stock, marca y botón WhatsApp pre-rellenado.
+- **Cómo comprar**: [/#como-comprar](#como-comprar) — Pasos: filtrar → ver detalle → click WhatsApp → coordinar.
+- **Contacto / WhatsApp**: [/#contacto](#contacto) — Botón directo a WhatsApp Business.
+
+## Categorías del catálogo
+
+- Bebidas (gaseosas, aguas, jugos, energizantes)
+- Snacks (papas, maní, palitos, nachos)
+- Golosinas (chicles, caramelos, chocolates, alfajores)
+- Almacén (yerba, azúcar, arroz, fideos, harina)
+- Higiene (pasta dental, jabón, papel higiénico)
+- Limpieza (detergente, lavandina, suavizante)
+
+## Esquema de datos (para agentes)
+
+Cada producto expone JSON-LD `Product` en su página de detalle con:
+- `name`, `description`, `sku`, `brand`, `category`
+- `offers.price`, `offers.priceCurrency`, `offers.availability`
+- `image`, `url`
 
 ## Información de la empresa
-- Nombre: Promarket Logística
-- Rubro: Distribución mayorista / Logística para comercios
-- Canales: WhatsApp (consulta de precios, stock y zona de entrega)
-- Ubicación: Argentina
+
+- **Nombre**: Promarket Logística
+- **Rubro**: Distribución mayorista / Logística para comercios de cercanía
+- **Canal principal**: WhatsApp Business (consulta de precios, stock, zona de entrega)
+- **Ubicación**: Argentina
+- **Moneda**: ARS (Pesos argentinos)
+- **Idioma**: es-AR
