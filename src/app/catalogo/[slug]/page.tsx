@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProductBySlug, getSettings, getProducts } from "@/lib/sanity/index";
+import { getProductBySlug, getSettings, getProducts } from "@/lib/data";
 import { ProductDetail } from "@/components/sections/ProductDetail";
 import Script from "next/script";
 
