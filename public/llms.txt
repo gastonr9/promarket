@@ -1,0 +1,32 @@
+# Promarket Logística
+
+Distribucción y abastecimiento mayorista para kioscos, almacenes y comercios de cercanía en Argentina.
+
+## Catálogo principal
+/catalogo
+
+## Productos destacados
+/catalogo/gaseosa-cola
+/catalogo/papas-clasicas
+/catalogo/alfajor-triple
+/catalogo/pasta-dental
+/catalogo/caramelos-surtidos
+/catalogo/chocolate-tableta
+/catalogo/galletitas-dulces
+/catalogo/yerba-mate
+/catalogo/agua-mineral
+/catalogo/mani-salado
+/catalogo/arroz-largo-fino
+/catalogo/chicles
+
+## Cómo comprar
+/#como-comprar
+
+## Contacto y WhatsApp
+/#contacto
+
+## Información de la empresa
+- Nombre: Promarket Logística
+- Rubro: Distribución mayorista / Logística para comercios
+- Canales: WhatsApp (consulta de precios, stock y zona de entrega)
+- Ubicación: Argentina
