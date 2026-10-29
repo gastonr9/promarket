@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
-import { getSettings } from "@/lib/sanity";
+import { getSettings } from "@/lib/sanity/index";
 
 declare module "next-auth" {
   interface Session {

@@ -1,4 +1,4 @@
-import { getCatalogData } from "@/lib/sanity";
+import { getCatalogData } from "@/lib/sanity/index";
 import { Catalog } from "@/components/sections/Catalog";
 import { ToastProvider } from "@/components/ui/toast";
 import Link from "next/link";

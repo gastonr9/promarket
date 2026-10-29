@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSettings } from "@/lib/sanity";
+import { getSettings } from "@/lib/sanity/index";
 import { compare } from "bcryptjs";
 
 export async function GET() {

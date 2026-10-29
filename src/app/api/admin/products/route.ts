@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { readData, writeData } from "@/lib/sanity";
+import { readData, writeData } from "@/lib/sanity/index";
 import { productSchema, categorySchema, settingsSchema } from "@/lib/validation";
 
 export async function GET() {

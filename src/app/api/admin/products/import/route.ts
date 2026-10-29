@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { readData, writeData } from "@/lib/sanity";
+import { readData, writeData } from "@/lib/sanity/index";
 import type { Product } from "@/types";
 
 interface ImportRow {

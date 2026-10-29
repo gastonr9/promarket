@@ -3,7 +3,7 @@ import { Package, Tag, UploadCloud, Settings, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getProducts, getCategories, getBrands, getSettings } from "@/lib/sanity";
+import { getProducts, getCategories, getBrands, getSettings } from "@/lib/sanity/index";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 
 export const metadata = {

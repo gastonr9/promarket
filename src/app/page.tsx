@@ -1,4 +1,4 @@
-import { getCatalogData } from "@/lib/sanity";
+import { getCatalogData } from "@/lib/sanity/index";
 import { Hero, TrustStrip, Catalog, HowItWorks, ContactBand, Footer } from "@/components/sections";
 import { ToastProvider } from "@/components/ui/toast";
 import Script from "next/script";

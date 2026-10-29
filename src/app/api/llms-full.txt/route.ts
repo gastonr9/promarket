@@ -1,4 +1,4 @@
-import { getProducts, getCategories } from "@/lib/sanity";
+import { getProducts, getCategories } from "@/lib/sanity/index";
 
 export const runtime = "nodejs";
 export const revalidate = 3600; // ISR 1 hora
