@@ -66,7 +66,7 @@
   --muted-text: #374151;     /* Darkened further for strict WCAG AA contrast (Gray 700) */
   --line: #e1e5dd;
   --coral: #f15b42;
-  --coral-dark: #d94731;
+  --coral-dark: #b8321a;     /* Darkened for strict WCAG AA contrast on white */
   --lime: #7a931e;           /* Darkened for strict WCAG AA on paper/white (was #a3bd2d) */
   --lime-dark: #667a18;
   --blue: #244d78;
@@ -200,7 +200,9 @@
   .font-heading { font-family: var(--font-heading); }
   .font-body { font-family: var(--font-sans); }
 
-  .tracking-tight { letter-spacing: -0.02em; }
+  /* High-contrast lime for dark/light backgrounds */
+  .text-lime { color: #52b788; } /* Accessible green */
+  .dark .text-lime { color: #74c69d; }
   .tracking-tighter { letter-spacing: -0.04em; }
 
   .leading-tight { line-height: 1.1; }
@@ -247,20 +249,29 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Shimmer for skeleton loading */
+  /* Shimmer for skeleton loading - composited for performance */
   @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
   }
   .animate-shimmer {
-    animation: shimmer 1.5s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+  }
+  .animate-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
     background: linear-gradient(
       90deg,
-      var(--muted) 25%,
-      color-mix(in srgb, var(--muted-foreground) 10%, transparent) 50%,
-      var(--muted) 75%
+      var(--muted) 0%,
+      color-mix(in srgb, var(--muted-foreground) 10%, transparent) 25%,
+      var(--muted) 50%,
+      color-mix(in srgb, var(--muted-foreground) 10%, transparent) 75%,
+      var(--muted) 100%
     );
-    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
   }
 
   /* will-change utilities for performance */
