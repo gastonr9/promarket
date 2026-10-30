@@ -63,6 +63,7 @@
   --paper: #f6f7f1;
   --white: #fff;
   --ink: #17243b;
+  --ink-dark: #0d1828;    /* Darker ink for hover states */
   --muted-text: #374151;     /* Darkened further for strict WCAG AA contrast (Gray 700) */
   --line: #e1e5dd;
   --coral: #f15b42;
@@ -84,26 +85,26 @@
     --warning-fg: #92400e;
     --warning-border: #fcd34d;
 
-  /* Shadcn mappings - Fixed for WCAG AA contrast */
+  /* Shadcn mappings - Refined for professional look */
   --background: var(--paper);
   --foreground: var(--ink);
   --card: var(--white);
   --card-foreground: var(--ink);
   --popover: var(--white);
   --popover-foreground: var(--ink);
-  --primary: var(--coral);
+  --primary: var(--ink);           /* Main buttons are now elegant Ink Blue */
   --primary-foreground: var(--white);
-  --secondary: #cbdcc8;        /* Darker mint for strict WCAG AA contrast */
-  --secondary-foreground: #111b2e; /* Deep ink for high contrast */
+  --secondary: var(--mint);
+  --secondary-foreground: var(--ink);
   --muted: var(--mint);
-  --muted-foreground: var(--muted-text);  /* Now #4a5361 - passes AA on mint & paper */
+  --muted-foreground: var(--muted-text);
   --accent: var(--lime);
   --accent-foreground: var(--ink);
   --destructive: var(--coral-dark);
   --destructive-foreground: var(--white);
   --border: var(--line);
   --input: var(--line);
-  --ring: var(--coral);
+  --ring: var(--ink);
   --radius: 0.4375rem; /* 7px */
 
   /* Sidebar */
@@ -139,28 +140,28 @@
   --card-foreground: var(--paper);
   --popover: #1e2d45;
   --popover-foreground: var(--paper);
-  --primary: var(--coral);
-  --primary-foreground: var(--white);
+  --primary: var(--paper);         /* Primary buttons are paper/white on dark */
+  --primary-foreground: var(--ink);
   --secondary: #2a3f5e;
   --secondary-foreground: var(--paper);
   --muted: #2a3f5e;
-  --muted-foreground: #a0a8b8;   /* Lightened for AA on dark muted */
+  --muted-foreground: #a0a8b8;
   --accent: var(--lime);
   --accent-foreground: var(--ink);
   --destructive: var(--coral);
   --destructive-foreground: var(--white);
   --border: #2a3f5e;
   --input: #2a3f5e;
-  --ring: var(--coral);
+  --ring: var(--paper);
 
   --sidebar: #1e2d45;
   --sidebar-foreground: var(--paper);
-  --sidebar-primary: var(--coral);
-  --sidebar-primary-foreground: var(--white);
+  --sidebar-primary: var(--paper);
+  --sidebar-primary-foreground: var(--ink);
   --sidebar-accent: var(--lime);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: #2a3f5e;
-  --sidebar-ring: var(--coral);
+  --sidebar-ring: var(--paper);
 }
 
 @layer base {
