@@ -67,8 +67,8 @@
   --line: #e1e5dd;
   --coral: #f15b42;
   --coral-dark: #b8321a;     /* Darkened for strict WCAG AA contrast on white */
-  --lime: #556b2f;           /* Darkened for strict WCAG AA on paper/white */
-  --lime-dark: #3e4d22;      /* Darkened accordingly */
+  --lime: #c4e04f;           /* Pistacho luminoso - fresh, modern, AA on dark ink */
+  --lime-dark: #a3bd2d;      /* Slightly darker for hover states */
   --blue: #244d78;
   --mint: #dcead8;           /* Light mint for subtle backgrounds */
   --mint-dark: #c8d8c4;      /* Darker mint for better contrast */
