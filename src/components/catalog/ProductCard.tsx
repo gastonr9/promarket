@@ -85,7 +85,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <p className="text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground">
                 {brandName}
               </p>
-              <span className="text-[9px] font-bold text-muted-foreground/60">
+              <span className="text-[10px] font-bold text-muted-foreground">
                 REF: {product.id.slice(0, 6).toUpperCase()}
               </span>
             </div>

@@ -191,8 +191,10 @@ export function exportProductsToPDF(products: Product[]) {
   `;
 
   const printWindow = window.open("", "_blank", "noopener,noreferrer");
-  if (printWindow) {
-    printWindow.document.write(htmlContent);
-    printWindow.document.close();
+  if (!printWindow) {
+    alert("El navegador bloqueó la ventana emergente. Permití ventanas emergentes para este sitio y volvé a intentarlo.");
+    return;
   }
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
 }
