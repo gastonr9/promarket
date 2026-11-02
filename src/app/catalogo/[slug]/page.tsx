@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProductBySlug, getSettings, getProducts } from "@/lib/data";
 import { ProductDetail } from "@/components/sections/ProductDetail";
-import Script from "next/script";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -64,18 +63,5 @@ export default async function ProductPage({ params }: PageProps) {
     notFound();
   }
 
-  return (
-    <>
-      <Script
-        id="promarket-settings"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `window.__PROMARKET_SETTINGS__ = ${JSON.stringify({
-            whatsappNumber: settings.whatsappNumber,
-          })};`,
-        }}
-      />
-      <ProductDetail product={product} />
-    </>
-  );
+  return <ProductDetail product={product} whatsappNumber={settings.whatsappNumber} />;
 }

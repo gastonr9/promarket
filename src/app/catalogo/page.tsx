@@ -10,6 +10,9 @@ export const metadata = {
   description: "Explorá nuestro catálogo completo de productos para kioscos, almacenes y comercios. Bebidas, snacks, golosinas y más al por mayor.",
 };
 
+// Force dynamic rendering due to searchParams usage (Next.js 15+)
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
@@ -19,7 +22,7 @@ export default async function CatalogPage({ searchParams }: PageProps) {
   const categoryParam = typeof resolvedParams.category === "string" ? resolvedParams.category : "Todos";
   const searchParam = typeof resolvedParams.q === "string" ? resolvedParams.q : "";
 
-  const { products, categories, settings } = await getCatalogData();
+  const { products, categories } = await getCatalogData();
 
   return (
     <ToastProvider>

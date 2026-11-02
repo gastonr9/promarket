@@ -2,8 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -133,37 +131,6 @@
   --step-hero: clamp(3rem, 2rem + 5vw, 5.5rem);                    /* 48-88px */
 }
 
-.dark {
-  --background: var(--ink);
-  --foreground: var(--paper);
-  --card: #1e2d45;
-  --card-foreground: var(--paper);
-  --popover: #1e2d45;
-  --popover-foreground: var(--paper);
-  --primary: var(--paper);         /* Primary buttons are paper/white on dark */
-  --primary-foreground: var(--ink);
-  --secondary: #2a3f5e;
-  --secondary-foreground: var(--paper);
-  --muted: #2a3f5e;
-  --muted-foreground: #a0a8b8;
-  --accent: var(--lime);
-  --accent-foreground: var(--ink);
-  --destructive: var(--coral);
-  --destructive-foreground: var(--white);
-  --border: #2a3f5e;
-  --input: #2a3f5e;
-  --ring: var(--paper);
-
-  --sidebar: #1e2d45;
-  --sidebar-foreground: var(--paper);
-  --sidebar-primary: var(--paper);
-  --sidebar-primary-foreground: var(--ink);
-  --sidebar-accent: var(--lime);
-  --sidebar-accent-foreground: var(--ink);
-  --sidebar-border: #2a3f5e;
-  --sidebar-ring: var(--paper);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -201,9 +168,8 @@
   .font-heading { font-family: var(--font-heading); }
   .font-body { font-family: var(--font-sans); }
 
-  /* High-contrast lime for dark/light backgrounds */
+  /* High-contrast lime for accessible contrast */
   .text-lime { color: #52b788; } /* Accessible green */
-  .dark .text-lime { color: #74c69d; }
   .tracking-tighter { letter-spacing: -0.04em; }
 
   .leading-tight { line-height: 1.1; }

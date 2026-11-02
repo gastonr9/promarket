@@ -11,7 +11,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Edit, Trash2, Upload, Download, ChevronLeft, ChevronRight, Package, FileSpreadsheet } from "lucide-react";
+import { Plus, Edit, Trash2, Upload, Download, ChevronLeft, ChevronRight, Package, FileSpreadsheet, X, Loader2, FileText } from "lucide-react";
+import { exportProductsToPDF } from "@/lib/exportPdf";
+import { analytics } from "@/lib/analytics";
 import { SearchInput } from "@/components/catalog/SearchInput";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -29,7 +31,7 @@ interface ProductFormData {
   priceType: "consultar" | "fijo";
   fixedPrice: string;
   tags: string;
-  images: string;
+  images: Array<{ url: string; alt?: string }>;
   active: boolean;
   order: string;
 }
@@ -44,10 +46,30 @@ const initialFormData: ProductFormData = {
   priceType: "consultar",
   fixedPrice: "",
   tags: "",
-  images: "",
+  images: [],
   active: true,
   order: "0",
 };
+
+// Helper to auto-generate slug from name
+const generateSlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Remove accents
+    .replace(/[^a-z0-9\s-]/g, "") // Remove special chars
+    .replace(/\s+/g, "-") // Spaces to hyphens
+    .replace(/-+/g, "-") // Multiple hyphens to single
+    .replace(/^-|-$/g, ""); // Trim hyphens
+};
+
+// Upload state for images
+interface UploadedImage {
+  id: string;
+  url: string;
+  preview: string;
+  uploading: boolean;
+}
 
 function AdminProductsPageContent() {
   const router = useRouter();
@@ -66,6 +88,10 @@ function AdminProductsPageContent() {
   const [importPreview, setImportPreview] = useState<Array<{ name: string; type: string }>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  
+  // Image upload state
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
+  const [dragActive, setDragActive] = useState(false);
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -105,6 +131,100 @@ function AdminProductsPageContent() {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Image upload handlers
+  const handleImageUpload = async (files: FileList | File[]) => {
+    const filesArray = Array.from(files);
+    if (filesArray.length === 0) return;
+
+    for (const file of filesArray) {
+      // Validate file type
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+      if (!allowedTypes.includes(file.type)) {
+        showToast(`${file.name}: Tipo no permitido (solo JPG, PNG, WebP, GIF)`, "error");
+        continue;
+      }
+      // Validate file size (2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        showToast(`${file.name}: Archivo muy grande (máx 2MB)`, "error");
+        continue;
+      }
+
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(file);
+      const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+      
+      // Add to uploaded images with uploading state
+      setUploadedImages(prev => [...prev, {
+        id: tempId,
+        url: "",
+        preview: previewUrl,
+        uploading: true,
+      }]);
+
+      // Upload to server
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        
+        const res = await fetch("/api/admin/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        
+        if (!res.ok) throw new Error(data.error);
+
+        // Update with real URL
+        setUploadedImages(prev => prev.map(img => 
+          img.id === tempId ? { ...img, url: data.url, uploading: false } : img
+        ));
+        showToast("Imagen subida correctamente", "success");
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Error al subir";
+        showToast(`${file.name}: ${message}`, "error");
+        // Remove failed upload
+        setUploadedImages(prev => prev.filter(img => img.id !== tempId));
+        URL.revokeObjectURL(previewUrl);
+      }
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files.length > 0) {
+      handleImageUpload(e.dataTransfer.files);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleImageUpload(e.target.files);
+    }
+    e.target.value = "";
+  };
+
+  const removeImage = (id: string) => {
+    const img = uploadedImages.find(i => i.id === id);
+    if (img && img.preview.startsWith("blob:")) {
+      URL.revokeObjectURL(img.preview);
+    }
+    setUploadedImages(prev => prev.filter(i => i.id !== id));
+  };
 
   // Sync URL params to state - runs when searchParams change
   useEffect(() => {
@@ -154,7 +274,7 @@ function AdminProductsPageContent() {
             priceType: product.priceType,
             fixedPrice: product.fixedPrice?.toString() || "",
             tags: product.tags?.join(", ") || "",
-            images: product.images?.map(i => i.url).join(", ") || "",
+            images: product.images?.map(i => ({ url: i.url, alt: i.alt || "" })) || [],
             active: product.active,
             order: product.order.toString(),
           });
@@ -163,13 +283,29 @@ function AdminProductsPageContent() {
     }
   }, [searchParams, products]);
 
+  // Sync uploaded images to formData
+  useEffect(() => {
+    setTimeout(() => {
+      setFormData(prev => ({
+        ...prev,
+        images: uploadedImages.map(img => ({ url: img.url || img.preview, alt: "" })),
+      }));
+    }, 0);
+  }, [uploadedImages]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Use uploadedImages which have the real URLs after upload
+    const finalImages = uploadedImages.map(img => ({
+      url: img.url || img.preview,
+      alt: "",
+    }));
+    
     const productData = {
       ...formData,
       fixedPrice: formData.priceType === "fijo" ? parseFloat(formData.fixedPrice) : undefined,
       tags: formData.tags.split(",").map(t => t.trim()).filter(Boolean),
-      images: formData.images.split(",").map(u => ({ url: u.trim() })).filter(i => i.url),
+      images: finalImages,
       order: parseInt(formData.order) || 0,
     };
 
@@ -183,8 +319,17 @@ function AdminProductsPageContent() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       showToast(editingProduct ? "Producto actualizado" : "Producto creado", "success");
+      
+      // Track analytics
+      if (editingProduct) {
+        analytics.productUpdate(editingProduct.id, editingProduct.name, editingProduct.category);
+      } else {
+        analytics.productCreate(data.product?.id || "new", productData.name, productData.category);
+      }
+      
       setDialogOpen(false);
       setFormData(initialFormData);
+      setUploadedImages([]);
       setEditingProduct(null);
       router.replace("/admin/products");
       fetchData();
@@ -196,6 +341,15 @@ function AdminProductsPageContent() {
 
   const openEditDialog = (product: Product) => {
     setEditingProduct(product);
+    // Populate uploadedImages from existing product images
+    const existingImages: UploadedImage[] = (product.images || []).map((img, idx) => ({
+      id: `existing-${product.id}-${idx}`,
+      url: img.url,
+      preview: img.url,
+      uploading: false,
+    }));
+    setUploadedImages(existingImages);
+    
     setFormData({
       name: product.name,
       slug: product.slug,
@@ -206,7 +360,7 @@ function AdminProductsPageContent() {
       priceType: product.priceType,
       fixedPrice: product.fixedPrice?.toString() || "",
       tags: product.tags?.join(", ") || "",
-      images: product.images?.map(i => i.url).join(", ") || "",
+      images: product.images?.map(i => ({ url: i.url, alt: i.alt || "" })) || [],
       active: product.active,
       order: product.order.toString(),
     });
@@ -217,10 +371,12 @@ function AdminProductsPageContent() {
   const openCreateDialog = () => {
     setEditingProduct(null);
     setFormData(initialFormData);
+    setUploadedImages([]);
     setDialogOpen(true);
   };
 
   const handleDelete = async (id: string) => {
+    const product = products.find(p => p.id === id);
     if (!confirm("¿Eliminar este producto?")) return;
     try {
       const res = await fetch("/api/admin/products", {
@@ -231,6 +387,12 @@ function AdminProductsPageContent() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       showToast("Producto eliminado correctamente", "success");
+      
+      // Track analytics
+      if (product) {
+        analytics.productDelete(product.id, product.name, product.category);
+      }
+      
       fetchData();
     } catch (error) {
       const message = error instanceof Error ? error.message : "Error desconocido";
@@ -260,6 +422,10 @@ function AdminProductsPageContent() {
       const result = await res.json();
       if (!res.ok) throw new Error(result.error);
       showToast(`${result.imported} productos importados, ${result.errors} errores`, "success");
+      
+      // Track analytics
+      analytics.importProducts(importFile.size, importFile.name, result.imported || 0, result.errors || 0);
+      
       setImportFile(null);
       setImportPreview([]);
       fetchData();
@@ -310,6 +476,10 @@ function AdminProductsPageContent() {
             <p className="text-muted-foreground mt-1">Gestioná el catálogo mayorista</p>
           </div>
           <div className="flex gap-2">
+            <Button variant="outline" onClick={() => exportProductsToPDF(products)} className="gap-2">
+              <FileText className="h-4 w-4" />
+              Exportar PDF
+            </Button>
             <Button variant="outline" onClick={downloadTemplate} className="gap-2">
               <Download className="h-4 w-4" />
               Plantilla Excel
@@ -496,11 +666,30 @@ function AdminProductsPageContent() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">Nombre *</Label>
-                  <Input id="name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
+                  <Input 
+                    id="name" 
+                    value={formData.name} 
+                    onChange={e => {
+                      const newName = e.target.value;
+                      setFormData(prev => ({
+                        ...prev,
+                        name: newName,
+                        // Auto-generate slug only if user hasn't manually edited it
+                        slug: prev.slug === generateSlug(prev.name) ? generateSlug(newName) : prev.slug,
+                      }));
+                    }} 
+                    required 
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="slug">Slug (URL) *</Label>
-                  <Input id="slug" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} required />
+                  <Input 
+                    id="slug" 
+                    value={formData.slug} 
+                    onChange={e => setFormData({...formData, slug: e.target.value})} 
+                    required 
+                  />
+                  <p className="text-xs text-muted-foreground">Se genera automáticamente desde el nombre. Editable si es necesario.</p>
                 </div>
               </div>
 
@@ -567,8 +756,79 @@ function AdminProductsPageContent() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="images">Imágenes (URLs separadas por coma)</Label>
-                <Input id="images" placeholder="https://ejemplo.com/img1.jpg, https://ejemplo.com/img2.jpg" value={formData.images} onChange={e => setFormData({...formData, images: e.target.value})} />
+                <Label htmlFor="images">Imágenes</Label>
+                
+                {/* Drag & Drop Upload Zone */}
+                <button
+                  type="button"
+                  className={`relative border-2 border-dashed rounded-xl p-6 transition-colors w-full text-left ${
+                    dragActive 
+                      ? "border-coral bg-coral/5" 
+                      : "border-border hover:border-coral/50"
+                  }`}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onClick={() => document.getElementById("images")?.click()}
+                  aria-label="Subir imágenes"
+                >
+                  <input
+                    id="images"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    multiple
+                    onChange={handleFileInputChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                  />
+                  <div className="text-center">
+                    <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
+                    <p className="text-sm text-muted-foreground">
+                      Arrastra imágenes aquí o <span className="text-coral underline">haz clic para seleccionar</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      JPG, PNG, WebP, GIF · Máx 2MB por imagen
+                    </p>
+                  </div>
+                </button>
+
+                {/* Image Preview Grid */}
+                {(uploadedImages.length > 0 || (formData.images?.length > 0 && !editingProduct)) && (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                    {uploadedImages.map((img) => (
+                      <div key={img.id} className="relative group aspect-square rounded-lg overflow-hidden bg-muted border border-border">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          {img.uploading ? (
+                            <Loader2 className="h-6 w-6 animate-spin text-coral" />
+                          ) : (
+                            <img
+                              src={img.preview}
+                              alt={`Vista previa de ${img.preview.startsWith("blob:") ? "imagen local" : "imagen subida"}`}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                          )}
+                        </div>
+                        {!img.uploading && (
+                          <button
+                            type="button"
+                            onClick={() => removeImage(img.id)}
+                            className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600 text-white rounded-full p-1 hover:bg-red-700"
+                            aria-label="Eliminar imagen"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        )}
+                        {img.uploading && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <span className="text-xs text-white">Subiendo...</span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="grid gap-4 md:grid-cols-3">
@@ -585,7 +845,7 @@ function AdminProductsPageContent() {
               </div>
 
               <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => { setDialogOpen(false); setFormData(initialFormData); setEditingProduct(null); router.replace("/admin/products"); }}>
+                <Button type="button" variant="outline" onClick={() => { setDialogOpen(false); setFormData(initialFormData); setUploadedImages([]); setEditingProduct(null); router.replace("/admin/products"); }}>
                   Cancelar
                 </Button>
                 <Button type="submit" className="gap-2">

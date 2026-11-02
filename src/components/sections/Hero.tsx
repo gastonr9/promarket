@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import { SectionReveal, MotionSection, useInView } from "@/components/ui";
 
 interface HeroProps {
   subtitle?: string;
@@ -12,6 +14,8 @@ interface HeroProps {
 }
 
 export function Hero({ subtitle, heroImage, announcementText }: HeroProps) {
+  const [heroImageRef] = useInView();
+
   return (
     <>
       {announcementText && (
@@ -27,47 +31,53 @@ export function Hero({ subtitle, heroImage, announcementText }: HeroProps) {
       <section className="hero relative overflow-hidden py-14 lg:py-20" id="inicio" aria-labelledby="hero-title">
         <div className="wrap mx-auto px-6 lg:px-8">
           <div className="hero-grid grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[440px]">
-            <div className="hero-copy relative z-10 pt-4 lg:pt-8 animate-rise">
-              <span className="eyebrow inline-flex items-center gap-2 text-[var(--blue)] font-extrabold text-xs uppercase tracking-wider mb-5">
-                <span className="w-5 h-0.5 bg-[var(--coral)]" aria-hidden="true"></span>
-                Mayorista para comercios
-              </span>
-              <h1
-                id="hero-title"
-                className="font-heading font-extrabold leading-[1.02] tracking-tight mb-5 lg:mb-6 text-4xl lg:text-5xl xl:text-6xl"
-                style={{ maxWidth: "570px" }}
-              >
-                Tu negocio siempre <em className="text-[var(--coral-dark)] not-italic">en movimiento.</em>
-              </h1>
-              <p className="text-muted-foreground text-base lg:text-lg leading-relaxed mb-6 max-w-[470px]">
-                {subtitle || "Todo lo que tu kiosco o almacén necesita, en un solo lugar. Encontrá tus productos y pedinos precio directo por WhatsApp."}
-              </p>
+            <SectionReveal className="hero-copy relative z-10 pt-4 lg:pt-8">
+              <MotionSection variant="itemFast">
+                <h1
+                  id="hero-title"
+                  className="font-heading font-extrabold leading-[1.02] tracking-tight mb-5 lg:mb-6 text-4xl lg:text-5xl xl:text-6xl"
+                  style={{ maxWidth: "570px" }}
+                >
+                  Tu negocio siempre abastecido.
+                </h1>
+              </MotionSection>
+              <MotionSection variant="itemFast">
+                <p className="text-muted-foreground text-base lg:text-lg leading-relaxed mb-6 max-w-[470px]">
+                  {subtitle || "Catálogo completo con precios de lista. Elegís productos, consultás por WhatsApp y coordinamos la entrega. Sin comisiones, sin vueltas."}
+                </p>
+              </MotionSection>
+              <MotionSection variant="itemFast">
+                <div className="hero-actions flex flex-wrap gap-3 mb-6">
+                  <Link href="#catalogo">
+                    <Button variant="default" size="lg" className="gap-2">
+                      Ver catálogo completo
+                      <ArrowRight className="h-5 w-5" aria-hidden="true" />
+                    </Button>
+                  </Link>
+                  <Link href="#contacto">
+                    <Button variant="secondary" size="lg">
+                      Quiero ser cliente
+                    </Button>
+                  </Link>
+                </div>
+              </MotionSection>
+              <MotionSection variant="itemFast">
+                <div className="hero-note flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                  <Check className="h-4 w-4 text-[var(--coral)] shrink-0" aria-hidden="true" />
+                  Atención directa para comercios · Solo WhatsApp
+                </div>
+              </MotionSection>
+            </SectionReveal>
 
-              <div className="hero-actions flex flex-wrap gap-3 mb-6">
-                <Link href="#catalogo">
-                  <Button variant="default" size="lg" className="gap-2">
-                    Explorar catálogo
-                    <ArrowRight className="h-5 w-5" aria-hidden="true" />
-                  </Button>
-                </Link>
-                <Link href="#contacto">
-                  <Button variant="secondary" size="lg">
-                    Quiero ser cliente
-                  </Button>
-                </Link>
-              </div>
-
-              <div className="hero-note flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                <span className="inline-grid place-items-center w-5 h-5 rounded-full bg-[var(--lime)] text-ink text-[11px] font-bold" aria-hidden="true">
-                  <Check className="h-3 w-3" />
-                </span>
-                Atención directa para comercios
-              </div>
-            </div>
-
-            <div className="hero-visual relative min-h-[410px] animate-rise-delayed">
+            <div className="hero-visual relative min-h-[410px]">
               {heroImage ? (
-                <div className="clip-scalloped overflow-hidden rounded-[var(--radius-xl)] shadow-brand">
+                <motion.div
+                  ref={heroImageRef}
+                  className="clip-scalloped overflow-hidden rounded-[var(--radius-xl)] shadow-brand h-full min-h-[410px]"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
                   <Image
                     src={heroImage}
                     alt="Góndolas de un comercio de cercanía abastecido por Promarket Logística"
@@ -79,21 +89,14 @@ export function Hero({ subtitle, heroImage, announcementText }: HeroProps) {
                     width={700}
                     height={500}
                   />
-                </div>
+                </motion.div>
               ) : (
                 <div className="absolute inset-0 bg-muted rounded-[var(--radius-xl)] flex items-center justify-center shadow-brand">
-                  <span className="text-8xl opacity-30">🏪</span>
+                  <svg className="w-16 h-16 text-muted-foreground/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
                 </div>
               )}
-
-              {/* Floating UI elements */}
-              <div className="absolute right-0 bottom-4 w-[220px] lg:w-[260px] p-4 bg-white rounded-[var(--radius)] shadow-brand">
-                <strong className="text-sm leading-snug">Abastecimiento simple</strong>
-                <p className="text-xs text-muted-foreground mt-1 leading-snug">Una consulta y seguimos</p>
-              </div>
-
-              <div className="absolute right-[-1rem] top-[-1rem] w-12 h-12 rounded-full bg-[var(--lime)] opacity-50" aria-hidden="true" />
-              <div className="absolute left-0 bottom-0 w-7 h-7 rounded-full bg-[var(--coral)] opacity-90" aria-hidden="true" />
             </div>
           </div>
         </div>

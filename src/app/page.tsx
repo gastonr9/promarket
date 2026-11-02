@@ -1,7 +1,6 @@
 import { getCatalogData } from "@/lib/data";
 import { Hero, TrustStrip, Catalog, HowItWorks, ContactBand, Footer } from "@/components/sections";
 import { ToastProvider } from "@/components/ui/toast";
-import Script from "next/script";
 import { Suspense } from "react";
 
 export const metadata = {
@@ -14,15 +13,6 @@ export default async function HomePage() {
 
   return (
     <ToastProvider>
-      <Script
-        id="promarket-settings"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `window.__PROMARKET_SETTINGS__ = ${JSON.stringify({
-            whatsappNumber: settings.whatsappNumber,
-          })};`,
-        }}
-      />
       <div className="min-h-screen flex flex-col bg-background">
         <Hero
           announcementText={settings.announcementText}

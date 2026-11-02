@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface SearchInputProps {
   value: string;
@@ -20,6 +21,7 @@ export function SearchInput({
   className = ""
 }: SearchInputProps) {
   const [localValue, setLocalValue] = useState(value || "");
+  const [isFocused, setIsFocused] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sync local value with prop
@@ -40,12 +42,18 @@ export function SearchInput({
   };
 
   return (
-    <div className={cn("search-input relative flex-1 max-w-xs", className)}>
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+    <motion.div
+      className={cn("search-input relative flex-1 max-w-xs", className)}
+      animate={{ scale: isFocused ? 1.01 : 1 }}
+      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+    >
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors duration-200" aria-hidden="true" />
       <input
         type="search"
         value={localValue}
         onChange={handleChange}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
         className={cn(
           "w-full h-10 pl-10 pr-4 rounded-[var(--radius)] border border-input bg-background",
@@ -56,6 +64,6 @@ export function SearchInput({
         aria-label="Buscar en el catálogo"
         autoComplete="off"
       />
-    </div>
+    </motion.div>
   );
 }

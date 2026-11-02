@@ -7,6 +7,7 @@ import { useSession, signOut } from "next-auth/react";
 import { LayoutDashboard, Package, Tag, Settings, Eye, LogOut, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { CommandPalette } from "./CommandPalette";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -122,6 +123,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             href="/"
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
             target="_blank"
+            rel="noopener noreferrer"
           >
             <Eye className="h-5 w-5" aria-hidden="true" />
             Ver sitio público
@@ -164,7 +166,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             </div>
 
             <div className="flex items-center gap-2">
-              <Link href="/" target="_blank">
+              <Link href="/" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost" size="sm" className="gap-1">
                   <Eye className="h-4 w-4" />
                   Sitio
@@ -182,6 +184,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </main>
+
+      {/* Command Palette */}
+      <CommandPalette />
     </div>
   );
 }

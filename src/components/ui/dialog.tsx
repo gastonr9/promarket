@@ -41,14 +41,15 @@ export function Dialog({ open, onOpenChange, children, className }: DialogProps)
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div
+      <button
         className={cn(
           "fixed inset-0 bg-black/60 backdrop-blur-sm",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
         )}
         onClick={() => onOpenChange(false)}
-        aria-hidden="true"
+        aria-label="Cerrar diálogo"
+        type="button"
       />
       <div
         ref={dialogRef}
@@ -60,7 +61,6 @@ export function Dialog({ open, onOpenChange, children, className }: DialogProps)
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
           className
         )}
-        onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >

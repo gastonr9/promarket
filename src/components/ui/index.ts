@@ -13,3 +13,4 @@ export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableC
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
 export { Skeleton, ProductCardSkeleton, ProductGridSkeleton } from "./skeleton";
 export { Separator } from "./separator";
+export { SectionReveal, MotionSection, sectionRevealVariants, useInView } from "./SectionReveal";

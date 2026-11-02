@@ -1,6 +1,5 @@
 "use client";
 
-import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -9,14 +8,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-[var(--ink-dark)] shadow-brand",
+        default: "bg-primary text-primary-foreground hover:bg-[var(--coral-dark)] hover:text-white hover:shadow-[0_8px_25px_rgba(241,91,66,0.35)] shadow-brand",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         outline: "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground",
         ghost: "bg-transparent hover:bg-muted text-foreground",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        light: "bg-white text-foreground border-2 border-border hover:bg-[var(--lime)]/10 hover:text-[var(--lime-dark)]",
-          link: "bg-transparent hover:bg-transparent text-primary hover:underline p-0 h-auto gap-0",
-        },
+        light: "bg-card text-foreground border-2 border-border hover:bg-[var(--lime)] hover:text-ink shadow-lg",
+        link: "bg-transparent hover:bg-transparent text-primary hover:underline p-0 h-auto gap-0",
+      },
       size: {
         xs: "h-8 px-3 text-xs gap-1.5",
         sm: "h-10 px-4 text-sm gap-2",
@@ -38,7 +37,7 @@ const buttonVariants = cva(
   }
 );
 
-interface ButtonProps extends React.ComponentPropsWithoutRef<typeof ButtonPrimitive>, VariantProps<typeof buttonVariants> {}
+interface ButtonProps extends React.ComponentPropsWithoutRef<"button">, VariantProps<typeof buttonVariants> {}
 
 export const Button = ({
   className,
@@ -49,12 +48,12 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   return (
-    <ButtonPrimitive
+    <button
       className={cn(buttonVariants({ variant, size, fullWidth, className }))}
       {...props}
     >
       {children}
-    </ButtonPrimitive>
+    </button>
   );
 };
 

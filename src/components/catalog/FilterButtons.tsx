@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import type { Category } from "@/types";
 
 interface FilterButtonsProps {
@@ -23,22 +23,22 @@ export function FilterButtons({ categories, selectedCategory, onCategoryChange }
       aria-label="Filtrar productos por categoría"
     >
       {allCategories.map((category) => (
-        <Button
+        <motion.button
           key={category.slug}
-          variant={selectedCategory === category.slug ? "default" : "outline"}
-          size="sm"
           onClick={() => onCategoryChange(category.slug)}
           aria-pressed={selectedCategory === category.slug}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
           className={cn(
-            "h-9 px-3 text-xs font-bold",
+            "h-9 px-3 text-xs font-bold rounded-[var(--radius)]",
             "transition-all duration-180",
             selectedCategory === category.slug
-              ? "shadow-sm"
-              : "hover:bg-muted"
+              ? "bg-[var(--ink)] text-white shadow-sm"
+              : "bg-transparent border border-border text-[var(--ink)] hover:bg-[var(--mint)] hover:border-[var(--coral-dark)]"
           )}
         >
           {category.name}
-        </Button>
+        </motion.button>
       ))}
     </div>
   );

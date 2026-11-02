@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { DM_Sans, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SWRegistration } from "@/components/providers/SWRegistration";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -124,7 +125,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es-AR" className={`${dmSans.variable} ${manrope.variable} h-full antialiased`}>
+    <html lang="es-AR" className={`${dmSans.variable} ${manrope.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -139,6 +140,7 @@ export default function RootLayout({
         </main>
         <Analytics />
         <SpeedInsights />
+        <SWRegistration />
       </body>
     </html>
   );

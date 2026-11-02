@@ -10,7 +10,7 @@ export function Footer({ brandName = "Promarket Logística" }: FooterProps) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="footer bg-[var(--mint)] py-11 lg:py-14" role="contentinfo">
+    <footer className="footer bg-secondary py-11 lg:py-14" role="contentinfo">
       <div className="wrap mx-auto px-6 lg:px-8">
         <div className="footer-top flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 pb-8 lg:pb-10">
           <div className="lg:max-w-[300px]">
@@ -53,7 +53,7 @@ export function Footer({ brandName = "Promarket Logística" }: FooterProps) {
 
         <div className="footer-bottom flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 pt-4 lg:pt-6 border-t border-border text-muted-foreground text-xs">
           <span>© {year} {brandName}</span>
-          <span>El impulso que tu comercio necesita.</span>
+          <span className="flex items-center gap-4">El impulso que tu comercio necesita.</span>
         </div>
       </div>
     </footer>

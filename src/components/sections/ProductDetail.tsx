@@ -9,9 +9,10 @@ import type { Product, ProductImage } from "@/types";
 
 interface ProductDetailProps {
   product: Product;
+  whatsappNumber?: string;
 }
 
-export function ProductDetail({ product }: ProductDetailProps) {
+export function ProductDetail({ product, whatsappNumber }: ProductDetailProps) {
   // Handle both local format (url) and Sanity format (asset._ref)
   const getImageUrl = (img: ProductImage | undefined): string | null => {
     if (!img) return null;
@@ -31,10 +32,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const additionalImages = (product.images || []).slice(1);
 
   const handleWhatsAppClick = () => {
-    const settings = (window as unknown as { __PROMARKET_SETTINGS__: { whatsappNumber: string } }).__PROMARKET_SETTINGS__;
-    const whatsappNumber = settings?.whatsappNumber || "";
     const message = `Hola, quiero consultar precio y disponibilidad de ${product.name}.`;
-    const cleanNumber = whatsappNumber.replace(/\D/g, "");
+    const cleanNumber = whatsappNumber?.replace(/\D/g, "") || "";
 
     if (!cleanNumber) {
       alert("WhatsApp todavía no está configurado.");

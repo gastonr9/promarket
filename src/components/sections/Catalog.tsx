@@ -6,7 +6,10 @@ import { ProductGridSkeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { analytics } from "@/lib/analytics";
 import type { Product, Category } from "@/types";
+import { SectionReveal, MotionSection } from "@/components/ui";
 
 interface CatalogProps {
   products: Product[];
@@ -47,28 +50,30 @@ export function Catalog({ products, categories, initialCategory = "Todos", initi
     if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
     if (minLoadingTimeoutRef.current) clearTimeout(minLoadingTimeoutRef.current);
     
-    // Minimum 300ms loading for perceived performance
     minLoadingTimeoutRef.current = setTimeout(() => {
       setIsLoading(false);
     }, 300);
     
-    // Safety timeout
     loadingTimeoutRef.current = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
   }, []);
 
   const handleCategoryChange = useCallback((category: Category["slug"] | "Todos") => {
+    analytics.categoryChange(selectedCategory, category);
+    analytics.filterUse("category", category, products.length);
     setSelectedCategory(category);
     triggerLoading();
     updateUrl(category, searchQuery);
-  }, [triggerLoading, searchQuery, updateUrl]);
+  }, [triggerLoading, searchQuery, updateUrl, selectedCategory, products.length]);
 
   const handleSearchChange = useCallback((query: string) => {
+    analytics.searchQuery(query, products.length);
+    analytics.filterUse("search", query, products.length);
     setSearchQuery(query);
     triggerLoading();
     updateUrl(selectedCategory, query);
-  }, [triggerLoading, selectedCategory, updateUrl]);
+  }, [triggerLoading, selectedCategory, updateUrl, products.length]);
 
   const filteredProducts = useMemo(() => {
     let result = products;
@@ -113,28 +118,32 @@ export function Catalog({ products, categories, initialCategory = "Todos", initi
   return (
     <section id="catalogo" className="py-14 lg:py-20" aria-labelledby="catalogo-title">
       <div className="wrap mx-auto px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-          <div>
-            <h2 id="catalogo-title" className="font-heading font-extrabold text-3xl lg:text-4xl mb-2">
-              Catálogo mayorista
-            </h2>
-            <p className="text-muted-foreground text-base lg:text-lg">
-              Explorá nuestro surtido y consultá precios por WhatsApp
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <FilterButtons
-              categories={categories}
-              selectedCategory={selectedCategory}
-              onCategoryChange={handleCategoryChange}
-            />
-            <SearchInput
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder="Buscar en el catálogo..."
-            />
-          </div>
-        </div>
+        <SectionReveal>
+          <MotionSection variant="itemFast">
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
+              <div>
+                <h2 id="catalogo-title" className="font-heading font-extrabold text-3xl lg:text-4xl mb-1">
+                  Catálogo Mayorista
+                </h2>
+                <p className="text-muted-foreground text-base lg:text-lg">
+                  Explorá nuestro surtido y consultá precios por WhatsApp
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <FilterButtons
+                  categories={categories}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={handleCategoryChange}
+                />
+                <SearchInput
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  placeholder="Buscar productos, marcas..."
+                />
+              </div>
+            </div>
+          </MotionSection>
+        </SectionReveal>
 
         {hasActiveFilters && (
           <div className="mb-6 flex items-center justify-between">
@@ -156,12 +165,28 @@ export function Catalog({ products, categories, initialCategory = "Todos", initi
             <p className="text-sm text-muted-foreground">Probá con otros filtros o términos de búsqueda</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
-          </div>
+          <LayoutGroup>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" role="list" aria-label="Productos del catálogo">
+              <AnimatePresence mode="popLayout">
+                {filteredProducts.map((product, index) => (
+                  <motion.div
+                    key={product.id}
+                    layout
+                    role="listitem"
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                    style={{ transitionDelay: `${Math.min(index * 30, 150)}ms` }}
+                  >
+                    <ProductCard product={product} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </LayoutGroup>
         )}
+
       </div>
     </section>
   );
