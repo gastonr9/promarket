@@ -93,14 +93,12 @@ export async function exportProductsToPDF(products: Product[]) {
   document.body.appendChild(container);
 
   try {
-    // Render the container to canvas
+    // Render the container to canvas (let html2canvas calculate dimensions automatically)
     const canvas = await html2canvas(container, {
       scale: 2,
       useCORS: true,
       logging: false,
       backgroundColor: "#ffffff",
-      width: container.scrollWidth,
-      height: container.scrollHeight,
     });
 
     // Create PDF
