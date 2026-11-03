@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Edit, Trash2, Upload, Download, ChevronLeft, ChevronRight, Package, FileSpreadsheet, X, Loader2, FileText } from "lucide-react";
-import { exportProductsToPDF } from "@/lib/exportPdf";
+// Dynamic import for PDF export to reduce bundle size
 import { analytics } from "@/lib/analytics";
 import { SearchInput } from "@/components/catalog/SearchInput";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -476,7 +476,10 @@ function AdminProductsPageContent() {
             <p className="text-muted-foreground mt-1">Gestioná el catálogo mayorista</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => exportProductsToPDF(products)} className="gap-2">
+            <Button variant="outline" onClick={async () => {
+              const { exportProductsToPDF } = await import("@/lib/exportPdf");
+              exportProductsToPDF(products);
+            }} className="gap-2">
               <FileText className="h-4 w-4" />
               Exportar PDF
             </Button>
