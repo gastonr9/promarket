@@ -40,7 +40,7 @@ export function TopBar({
     <div className="top-bar bg-slate-50 border-b border-slate-200">
       <div className="wrap mx-auto px-4 lg:px-8">
         <div className="flex flex-col gap-2 py-2 text-sm font-body sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-slate-700">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-slate-600">
             <a 
               href={`tel:${whatsappNumber.replace(/\s/g, '')}`} 
               aria-label={`Llamar por WhatsApp al ${whatsappNumber}`}
@@ -63,13 +63,13 @@ export function TopBar({
             </a>
           </div>
           <div className="flex items-center justify-center gap-3 sm:justify-end">
-            <button aria-label="Instagram" className="text-slate-500 hover:text-primary transition-colors p-1.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" onClick={(e) => e.preventDefault()}>
+            <button aria-label="Instagram" className="text-slate-600 hover:text-primary transition-colors p-1.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" onClick={(e) => e.preventDefault()}>
               <InstagramIcon />
             </button>
-            <button aria-label="Facebook" className="text-slate-500 hover:text-primary transition-colors p-1.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" onClick={(e) => e.preventDefault()}>
+            <button aria-label="Facebook" className="text-slate-600 hover:text-primary transition-colors p-1.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" onClick={(e) => e.preventDefault()}>
               <FacebookIcon />
             </button>
-            <button aria-label="LinkedIn" className="text-slate-500 hover:text-primary transition-colors p-1.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" onClick={(e) => e.preventDefault()}>
+            <button aria-label="LinkedIn" className="text-slate-600 hover:text-primary transition-colors p-1.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" onClick={(e) => e.preventDefault()}>
               <LinkedinIcon />
             </button>
           </div>
