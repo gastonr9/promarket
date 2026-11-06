@@ -82,7 +82,7 @@ export function Footer({
                 P
               </span>
               <span className="font-heading font-bold text-xl leading-tight">
-                <span className="text-primary">Pro</span>Market
+                <span className="text-white">Pro</span>Market
                 <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Logística</span>
               </span>
             </Link>
@@ -110,7 +110,7 @@ export function Footer({
 
           {/* Empresa Links */}
           <nav className="footer-nav" aria-label="Empresa">
-            <h3 className="font-heading font-semibold text-base uppercase tracking-wider text-primary mb-4">Empresa</h3>
+            <h3 className="font-heading font-semibold text-base uppercase tracking-wider text-white mb-4">Empresa</h3>
             <ul className="space-y-3">
               {footerLinks.empresa.map((link) => (
                 <li key={link.label}>
@@ -125,7 +125,7 @@ export function Footer({
 
           {/* Servicios Links */}
           <nav className="footer-nav" aria-label="Servicios">
-            <h3 className="font-heading font-semibold text-base uppercase tracking-wider text-primary mb-4">Servicios</h3>
+            <h3 className="font-heading font-semibold text-base uppercase tracking-wider text-white mb-4">Servicios</h3>
             <ul className="space-y-3">
               {footerLinks.servicios.map((link) => (
                 <li key={link.label}>
@@ -140,10 +140,10 @@ export function Footer({
 
           {/* Contacto Column */}
           <div className="footer-contact">
-            <h3 className="font-heading font-semibold text-base uppercase tracking-wider text-primary mb-4">Contacto</h3>
+            <h3 className="font-heading font-semibold text-base uppercase tracking-wider text-white mb-4">Contacto</h3>
             <ul className="space-y-3 font-body text-sm text-slate-300">
               <li className="flex items-start gap-3">
-                <Phone className="h-5 w-5 flex-shrink-0 text-primary mt-0.5" aria-hidden="true" />
+                <Phone className="h-5 w-5 flex-shrink-0 text-white mt-0.5" aria-hidden="true" />
                 <a 
                   href={`tel:${whatsappNumber.replace(/\s/g, '')}`}
                   aria-label={`Llamar por WhatsApp al ${whatsappNumber}`}
@@ -153,7 +153,7 @@ export function Footer({
                 </a>
               </li>
               <li className="flex items-start gap-3">
-                <Mail className="h-5 w-5 flex-shrink-0 text-primary mt-0.5" aria-hidden="true" />
+                <Mail className="h-5 w-5 flex-shrink-0 text-white mt-0.5" aria-hidden="true" />
                 <a 
                   href={`mailto:${email}`}
                   aria-label={`Enviar correo a ${email}`}
@@ -163,7 +163,7 @@ export function Footer({
                 </a>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 flex-shrink-0 text-primary mt-0.5" aria-hidden="true" />
+                <MapPin className="h-5 w-5 flex-shrink-0 text-white mt-0.5" aria-hidden="true" />
                 <span>{address}</span>
               </li>
             </ul>
