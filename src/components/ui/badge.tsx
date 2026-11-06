@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "default" | "secondary" | "outline" | "accent" | "tag";
+  variant?: "default" | "secondary" | "outline" | "accent" | "tag" | "promo" | "volume";
   size?: "sm" | "default" | "lg";
 }
 
@@ -14,20 +14,22 @@ export function Badge({
   children,
   ...props
 }: BadgeProps) {
-  const baseStyles = "inline-flex items-center font-semibold rounded-[var(--radius)] transition-colors";
+  const baseStyles = "inline-flex items-center font-heading font-bold uppercase tracking-wider rounded-md transition-colors";
 
   const variants = {
-    default: "bg-primary text-primary-foreground",
-    secondary: "bg-secondary text-secondary-foreground",
-    outline: "border-2 border-border bg-transparent text-foreground",
-    accent: "bg-accent text-accent-foreground",
-    tag: "bg-[var(--lime)] text-[var(--ink)] font-extrabold uppercase tracking-wider",
+    default: "bg-slate-900 text-white",
+    secondary: "bg-slate-100 text-slate-700 border border-slate-200",
+    outline: "border border-slate-300 bg-transparent text-slate-700",
+    accent: "bg-primary-light text-primary",
+    tag: "bg-primary text-white",
+    promo: "bg-accent text-white",
+    volume: "bg-primary text-white",
   };
 
   const sizes = {
-    sm: "px-2 py-0.5 text-xs gap-1",
-    default: "px-2.5 py-1 text-xs gap-1.5",
-    lg: "px-3 py-1.5 text-sm gap-2",
+    sm: "px-2 py-0.5 text-[10px] gap-1",
+    default: "px-2.5 py-0.5 text-xs gap-1.5",
+    lg: "px-3 py-1 text-sm gap-2",
   };
 
   return (

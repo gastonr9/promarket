@@ -1,14 +1,52 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { motion, type MotionProps } from "framer-motion";
 
 /**
- * Variants for staggered section entrance animations
- * Following design-taste-frontend: heading → text → image/buttons
- * Stagger: 60-90ms, rise 16-32px with opacity
+ * Hook to detect when element enters viewport
+ * Respects prefers-reduced-motion
  */
-const sectionRevealVariants = {
+export function useInView(options: IntersectionObserverInit = {}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    // Check prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      // Defer to avoid synchronous state update in effect
+      requestAnimationFrame(() => setIsInView(true));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.unobserve(element);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+        ...options,
+      }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [options]);
+
+  return [ref, isInView] as const;
+}
+
+/**
+ * Animation variants for staggered entrance
+ */
+export const sectionRevealVariants = {
   container: {
     hidden: { opacity: 0 },
     show: {
@@ -55,52 +93,9 @@ const sectionRevealVariants = {
   },
 } as const;
 
-export { sectionRevealVariants };
-
-/**
- * Hook to detect when element enters viewport
- * Respects prefers-reduced-motion
- */
-export function useInView(options: IntersectionObserverInit = {}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isInView, setIsInView] = useState(false);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-
-    // Check prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-      // Defer to avoid synchronous state update in effect
-      requestAnimationFrame(() => setIsInView(true));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.unobserve(element);
-        }
-      },
-      {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-        ...options,
-      }
-    );
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [options]);
-
-  return [ref, isInView] as const;
-}
-
 /**
  * Wrapper component for section entrance animations
- * Usage: <SectionReveal><motion.div variants={sectionRevealVariants.item} /></SectionReveal>
+ * Usage: <SectionReveal><div className="motion-item" /></SectionReveal>
  */
 interface SectionRevealProps {
   children: React.ReactNode;
@@ -111,43 +106,54 @@ export function SectionReveal({ children, className }: SectionRevealProps) {
   const [ref, isInView] = useInView();
 
   return (
-    <motion.div
+    <div
       ref={ref}
       className={className}
-      variants={sectionRevealVariants.container}
-      initial={isInView ? "show" : "hidden"}
-      animate={isInView ? "show" : "hidden"}
+      style={{
+        opacity: isInView ? 1 : 0,
+        transform: isInView ? 'translateY(0)' : 'translateY(24px)',
+        transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
 /**
- * Wrapper for motion components that should animate on scroll
+ * Wrapper for components that should animate on scroll
  */
-interface MotionSectionProps extends MotionProps {
+interface MotionSectionProps {
   variant?: "item" | "itemFast" | "image";
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export function MotionSection({ variant = "item", children, ...props }: MotionSectionProps) {
+export function MotionSection({ variant = "item", children, className, style }: MotionSectionProps) {
   const [ref, isInView] = useInView();
 
-  const variants = {
-    item: sectionRevealVariants.item,
-    itemFast: sectionRevealVariants.itemFast,
-    image: sectionRevealVariants.image,
-  }[variant];
+  const variantStyles: Record<string, React.CSSProperties> = {
+    item: { opacity: 0, transform: 'translateY(24px)', transition: 'opacity 0.5s ease-out, transform 0.5s ease-out' },
+    itemFast: { opacity: 0, transform: 'translateY(16px)', transition: 'opacity 0.4s ease-out, transform 0.4s ease-out' },
+    image: { opacity: 0, transform: 'translateY(32px) scale(0.98)', transition: 'opacity 0.7s ease-out, transform 0.7s ease-out' },
+  };
+
+  const showStyles: Record<string, React.CSSProperties> = {
+    item: { opacity: 1, transform: 'translateY(0)', transition: 'opacity 0.5s ease-out, transform 0.5s ease-out' },
+    itemFast: { opacity: 1, transform: 'translateY(0)', transition: 'opacity 0.4s ease-out, transform 0.4s ease-out' },
+    image: { opacity: 1, transform: 'translateY(0) scale(1)', transition: 'opacity 0.7s ease-out, transform 0.7s ease-out' },
+  };
+
+  const currentStyles = isInView ? showStyles[variant] : variantStyles[variant];
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      variants={variants}
-      initial={isInView ? "show" : "hidden"}
-      animate={isInView ? "show" : "hidden"}
-      {...props}
+      className={className}
+      style={{ ...currentStyles, ...style }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

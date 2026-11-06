@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
-import { motion } from "framer-motion";
 
 interface SearchInputProps {
   value: string;
@@ -16,7 +15,7 @@ interface SearchInputProps {
 export function SearchInput({ 
   value, 
   onChange, 
-  placeholder = "Buscar en el catálogo...",
+  placeholder = "Buscar productos, marcas...",
   debounceMs = 300,
   className = ""
 }: SearchInputProps) {
@@ -26,7 +25,6 @@ export function SearchInput({
 
   // Sync local value with prop
   useEffect(() => {
-    // Use setTimeout to avoid synchronous setState in effect
     setTimeout(() => setLocalValue(value), 0);
   }, [value]);
 
@@ -42,12 +40,8 @@ export function SearchInput({
   };
 
   return (
-    <motion.div
-      className={cn("search-input relative flex-1 max-w-xs", className)}
-      animate={{ scale: isFocused ? 1.01 : 1 }}
-      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-    >
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors duration-200" aria-hidden="true" />
+    <div className={cn("search-input relative flex-1 max-w-xs", className)}>
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 transition-colors duration-150" aria-hidden="true" />
       <input
         type="search"
         value={localValue}
@@ -56,14 +50,18 @@ export function SearchInput({
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
         className={cn(
-          "w-full h-10 pl-10 pr-4 rounded-[var(--radius)] border border-input bg-background",
-          "placeholder:text-muted-foreground text-sm",
-          "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-          "transition-colors duration-150"
+          "w-full h-11 pl-10 pr-4 rounded-md border font-body text-sm",
+          "placeholder:text-slate-400 text-slate-900",
+          "focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary",
+          "transition-colors duration-150 bg-white",
+          isFocused 
+            ? "border-primary" 
+            : "border-slate-300"
         )}
         aria-label="Buscar en el catálogo"
         autoComplete="off"
+        spellCheck={false}
       />
-    </motion.div>
+    </div>
   );
 }

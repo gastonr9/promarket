@@ -1,33 +1,33 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Truck, PackageCheck, ShieldCheck } from "lucide-react";
+import { Truck, Tag, MessageSquare, Package } from "lucide-react";
 import { SectionReveal, MotionSection } from "@/components/ui";
 
 interface TrustStripProps {
   items?: Array<{
     icon: React.ReactNode;
-    text: string;
+    title: string;
+    description: string;
   }>;
 }
 
 export function TrustStrip({ items = defaultItems }: TrustStripProps) {
   return (
-    <section className="trust-strip bg-[var(--mint)] border-t border-[var(--border)] border-b border-[var(--border)]" aria-label="Ventajas">
+    <section className="trust-strip bg-white border-y border-slate-200 py-12 lg:py-16" aria-label="Nuestros servicios">
       <SectionReveal className="wrap mx-auto px-6 lg:px-8">
-        <div className="trust-items grid grid-cols-1 md:grid-cols-3 gap-4 py-5 min-h-[84px]">
+        <div className="trust-items grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {items.map((item, index) => (
-            <MotionSection key={index} variant="itemFast" style={{ transitionDelay: `${index * 70}ms` }}>
-              <div
-                className={cn(
-                  "trust-item flex items-center justify-center md:justify-start gap-3",
-                  "text-[var(--ink)] text-sm font-bold"
-                )}
-              >
-                <span className="trust-icon inline-grid place-items-center w-9 h-9 rounded-full bg-white text-[var(--coral-dark)] text-base shadow-sm" aria-hidden="true">
+            <MotionSection key={index} variant="itemFast" style={{ transitionDelay: `${index * 80}ms` }}>
+              <div className="trust-item flex flex-col items-center text-center gap-4">
+                <span className="trust-icon inline-grid place-items-center w-14 h-14 rounded-lg bg-primary-light text-primary" aria-hidden="true">
                   {item.icon}
                 </span>
-                {item.text}
+                <h3 className="font-heading font-semibold text-lg text-slate-900">
+                  {item.title}
+                </h3>
+                <p className="font-body text-sm text-slate-500 leading-relaxed max-w-xs">
+                  {item.description}
+                </p>
               </div>
             </MotionSection>
           ))}
@@ -39,15 +39,23 @@ export function TrustStrip({ items = defaultItems }: TrustStripProps) {
 
 const defaultItems = [
   {
-    icon: <Truck className="h-5 w-5" aria-hidden="true" />,
-    text: "Envíos directos en Santa Fe y zona",
+    icon: <Truck className="h-7 w-7" aria-hidden="true" />,
+    title: "Envío nacional",
+    description: "Llegamos a todo el país con logística propia y transportes aliados",
   },
   {
-    icon: <PackageCheck className="h-5 w-5" aria-hidden="true" />,
-    text: "Precios especiales por bulto cerrado",
+    icon: <Tag className="h-7 w-7" aria-hidden="true" />,
+    title: "Precios mayoristas",
+    description: "Tarifas escalonadas por volumen: a mayor compra, mejor precio unitario",
   },
   {
-    icon: <ShieldCheck className="h-5 w-5" aria-hidden="true" />,
-    text: "Asesoramiento comercial personalizado",
+    icon: <MessageSquare className="h-7 w-7" aria-hidden="true" />,
+    title: "Atención personalizada",
+    description: "Un asesor comercial dedicado para tu negocio, disponible por WhatsApp",
+  },
+  {
+    icon: <Package className="h-7 w-7" aria-hidden="true" />,
+    title: "Stock permanente",
+    description: "Reposición automática y alertas de productos críticos para tu local",
   },
 ];

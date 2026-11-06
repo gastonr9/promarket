@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { MessageSquare, ArrowLeft, ChevronRight, Truck, Shield, RotateCcw } from "lucide-react";
+import { MessageSquare, ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import type { Product, ProductImage } from "@/types";
 
@@ -64,7 +64,7 @@ export function ProductDetail({ product, whatsappNumber }: ProductDetailProps) {
   };
 
   return (
-    <article className="product-detail min-h-screen">
+    <article className="product-detail min-h-screen bg-background">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
@@ -95,7 +95,7 @@ export function ProductDetail({ product, whatsappNumber }: ProductDetailProps) {
 
           {/* Gallery */}
           <div className="detail-gallery space-y-4">
-            <div className="relative aspect-[4/5] bg-muted rounded-[var(--radius-xl)] overflow-hidden">
+            <div className="relative aspect-[4/5] bg-muted rounded-xl overflow-hidden">
               {imageUrl ? (
                 <Image
                   src={imageUrl}
@@ -110,10 +110,10 @@ export function ProductDetail({ product, whatsappNumber }: ProductDetailProps) {
                   height={750}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-muted animate-shimmer" aria-hidden="true">
-                  <span className="text-8xl opacity-30">
-                    {product.category === "Bebidas" ? "🥤" : product.category === "Snacks" ? "🍿" : "📦"}
-                  </span>
+                <div className="w-full h-full flex items-center justify-center bg-muted animate-pulse" aria-hidden="true">
+                  <svg className="w-24 h-24 text-muted-foreground/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
                 </div>
               )}
             </div>
@@ -125,7 +125,7 @@ export function ProductDetail({ product, whatsappNumber }: ProductDetailProps) {
                   return (
                     <button
                       key={i}
-                      className="relative flex-shrink-0 w-20 h-20 rounded-[var(--radius)] overflow-hidden border-2 border-transparent hover:border-primary transition-colors"
+                      className="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent hover:border-primary transition-colors"
                       aria-label={`Ver imagen ${i + 2}`}
                     >
                       {imgUrl && (
@@ -151,16 +151,16 @@ export function ProductDetail({ product, whatsappNumber }: ProductDetailProps) {
           {/* Info & Actions */}
           <div className="detail-info flex flex-col">
             <div className="mb-4">
-              <Badge variant="tag" className="mb-3 inline-block radius-nested">
+              <Badge variant="tag" className="mb-3 inline-block">
                 {product.category}
               </Badge>
-              <h1 className="font-heading font-extrabold text-3xl lg:text-4xl leading-tight">
+              <h1 className="font-heading font-bold text-3xl lg:text-4xl leading-tight text-foreground">
                 {product.name}
               </h1>
             </div>
 
             {product.description && (
-              <p className="text-muted-foreground text-base lg:text-lg leading-relaxed mb-6">
+              <p className="font-body text-base lg:text-lg leading-relaxed mb-6 text-muted-foreground">
                 {product.description}
               </p>
             )}
@@ -169,20 +169,20 @@ export function ProductDetail({ product, whatsappNumber }: ProductDetailProps) {
               <dl className="grid grid-cols-2 gap-y-3 gap-x-4 text-sm">
                 {product.detail && (
                   <>
-                    <dt className="text-muted-foreground">Presentación</dt>
-                    <dd className="font-semibold text-right">{product.detail}</dd>
+                    <dt className="font-body text-muted-foreground">Presentación</dt>
+                    <dd className="font-heading font-semibold text-right text-foreground">{product.detail}</dd>
                   </>
                 )}
                 {brandName && (
                   <>
-                    <dt className="text-muted-foreground">Marca</dt>
-                    <dd className="font-semibold text-right">{brandName}</dd>
+                    <dt className="font-body text-muted-foreground">Marca</dt>
+                    <dd className="font-heading font-semibold text-right text-foreground">{brandName}</dd>
                   </>
                 )}
-                <dt className="text-muted-foreground">Categoría</dt>
-                <dd className="font-semibold text-right">{product.category}</dd>
-                <dt className="text-muted-foreground">Precio</dt>
-                <dd className="font-semibold text-right text-[var(--coral-dark)] text-lg">
+                <dt className="font-body text-muted-foreground">Categoría</dt>
+                <dd className="font-heading font-semibold text-right text-foreground">{product.category}</dd>
+                <dt className="font-body text-muted-foreground">Precio</dt>
+                <dd className="font-heading font-semibold text-right text-primary text-lg">
                   {product.priceType === "fijo" && product.fixedPrice
                     ? `$${product.fixedPrice.toLocaleString("es-AR")}`
                     : "Consultar por WhatsApp"}
@@ -190,20 +190,10 @@ export function ProductDetail({ product, whatsappNumber }: ProductDetailProps) {
               </dl>
             </div>
 
-            {product.tags && product.tags.length > 0 && (
-              <div className="tags flex flex-wrap gap-2 mb-6">
-                {product.tags.map((tag) => (
-                  <Badge key={tag} variant="outline" className="text-xs radius-nested">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
-
             {/* CTA Buttons */}
             <div className="cta-group flex flex-col sm:flex-row gap-3 mb-8">
               <Button
-                variant="default"
+                variant="primary"
                 fullWidth
                 size="lg"
                 onClick={handleWhatsAppClick}
@@ -219,40 +209,8 @@ export function ProductDetail({ product, whatsappNumber }: ProductDetailProps) {
                 </Button>
               </Link>
             </div>
-
-            {/* Trust indicators */}
-            <div className="trust-indicators grid grid-cols-2 sm:grid-cols-3 gap-4 pt-6 border-t border-border">
-              <div className="flex flex-col items-center text-center p-3">
-                <Truck className="h-6 w-6 text-[var(--coral-dark)] mb-2" aria-hidden="true" />
-                <span className="text-xs font-semibold">Entrega a tu zona</span>
-                <span className="text-[10px] text-muted-foreground">Consultá cobertura</span>
-              </div>
-              <div className="flex flex-col items-center text-center p-3">
-                <Shield className="h-6 w-6 text-[var(--coral-dark)] mb-2" aria-hidden="true" />
-                <span className="text-xs font-semibold">Precios mayoristas</span>
-                <span className="text-[10px] text-muted-foreground">Sin intermediarios</span>
-              </div>
-              <div className="flex flex-col items-center text-center p-3">
-                <RotateCcw className="h-6 w-6 text-[var(--coral-dark)] mb-2" aria-hidden="true" />
-                <span className="text-xs font-semibold">Reposición ágil</span>
-                <span className="text-[10px] text-muted-foreground">Stock continuo</span>
-              </div>
-            </div>
           </div>
         </div>
-
-        {/* Related products - placeholder with better empty state */}
-        <section className="related mt-16" aria-labelledby="related-title">
-          <h2 id="related-title" className="font-heading font-extrabold text-2xl lg:text-3xl mb-6">
-            También te puede interesar
-          </h2>
-          <div className="text-muted-foreground text-center py-12 border-2 border-dashed border-border rounded-[var(--radius-xl)] space-y-4">
-            <p>
-              <Link href="/#catalogo" className="underline text-[var(--coral-dark)] hover:text-[var(--coral)]">Explorar catálogo completo</Link> para ver todo el surtido.
-            </p>
-            <span className="text-sm block">Próximamente: productos relacionados por categoría</span>
-          </div>
-        </section>
       </div>
     </article>
   );

@@ -39,7 +39,11 @@ export const authOptions: NextAuthOptions = {
         console.log("[AUTH] authorize function called with:", credentials ? { email: credentials.email, hasPassword: !!credentials.password } : "no credentials");
         console.log("[AUTH] Request object:", req ? Object.keys(req) : "null");
         console.log("[AUTH] req.body:", req?.body);
-        
+
+        // Log environment variables
+        console.log("[AUTH] process.env.ADMIN_EMAIL:", process.env.ADMIN_EMAIL || "NOT SET");
+        console.log("[AUTH] process.env.ADMIN_PASSWORD_HASH:", process.env.ADMIN_PASSWORD_HASH ? "SET (length: " + process.env.ADMIN_PASSWORD_HASH.length + ")" : "NOT SET");
+
         // If credentials are empty, try to use req.body (already parsed by Next.js)
         let parsedCredentials = credentials;
         if ((!credentials?.email || !credentials?.password) && req?.body) {
@@ -50,16 +54,20 @@ export const authOptions: NextAuthOptions = {
           };
           console.log("[AUTH] Parsed credentials from body:", { email: parsedCredentials.email, hasPassword: !!parsedCredentials.password });
         }
-        
+
         if (!parsedCredentials?.email || !parsedCredentials?.password) {
           throw new Error("Email y contraseña son requeridos");
         }
 
+        // Trim credentials to handle trailing spaces from form inputs
+        parsedCredentials.email = parsedCredentials.email.trim();
+        parsedCredentials.password = parsedCredentials.password.trim();
+
         try {
           console.log("[AUTH] Attempting login for:", parsedCredentials.email);
           const settings = await getSettings();
-          console.log("[AUTH] Settings loaded:", { 
-            adminEmail: settings.adminEmail, 
+          console.log("[AUTH] Settings loaded:", {
+            adminEmail: settings.adminEmail,
             hasHash: !!settings.adminPasswordHash,
             hashPreview: settings.adminPasswordHash?.substring(0, 20)
           });

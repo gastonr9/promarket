@@ -56,7 +56,7 @@ describe("ProductCard", () => {
   it("shows 'Consultar' for priceType consultar", () => {
     const productConsultar = { ...mockProduct, priceType: "consultar" as const, fixedPrice: undefined };
     render(<ProductCard product={productConsultar} />);
-    expect(screen.getByText("Consultar")).toBeInTheDocument();
+    expect(screen.getByText("Consultar precio")).toBeInTheDocument();
   });
 
   it("shows placeholder when no image", () => {

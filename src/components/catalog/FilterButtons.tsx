@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 import type { Category } from "@/types";
+import { motion } from "framer-motion";
 
 interface FilterButtonsProps {
   categories: Category[];
@@ -11,9 +11,12 @@ interface FilterButtonsProps {
 }
 
 export function FilterButtons({ categories, selectedCategory, onCategoryChange }: FilterButtonsProps) {
+  // Filter out "Todos" from categories since we add it manually
+  const categoryOptions = categories.filter(c => c.slug !== "todos");
+  
   const allCategories = [
     { id: "todos", name: "Todos", slug: "Todos" },
-    ...categories,
+    ...categoryOptions,
   ];
 
   return (
@@ -28,13 +31,12 @@ export function FilterButtons({ categories, selectedCategory, onCategoryChange }
           onClick={() => onCategoryChange(category.slug)}
           aria-pressed={selectedCategory === category.slug}
           whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
+          whileTap={{ scale: 0.98 }}
           className={cn(
-            "h-9 px-3 text-xs font-bold rounded-[var(--radius)]",
-            "transition-all duration-180",
+            "h-11 px-4 text-sm font-heading font-bold uppercase tracking-wider rounded-md border transition-all duration-150",
             selectedCategory === category.slug
-              ? "bg-[var(--ink)] text-white shadow-sm"
-              : "bg-transparent border border-border text-[var(--ink)] hover:bg-[var(--mint)] hover:border-[var(--coral-dark)]"
+              ? "bg-primary border-primary text-primary-foreground hover:bg-primary-hover"
+              : "bg-background border-border text-foreground hover:border-primary hover:text-primary hover:bg-muted"
           )}
         >
           {category.name}

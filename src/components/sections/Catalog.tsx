@@ -6,7 +6,6 @@ import { ProductGridSkeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { analytics } from "@/lib/analytics";
 import type { Product, Category } from "@/types";
 import { SectionReveal, MotionSection } from "@/components/ui";
@@ -116,19 +115,27 @@ export function Catalog({ products, categories, initialCategory = "Todos", initi
   }, [updateUrl]);
 
   return (
-    <section id="catalogo" className="py-14 lg:py-20" aria-labelledby="catalogo-title">
+    <section id="catalogo" className="bg-muted py-16 lg:py-24" aria-labelledby="catalogo-title">
       <div className="wrap mx-auto px-6 lg:px-8">
         <SectionReveal>
           <MotionSection variant="itemFast">
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
               <div>
-                <h2 id="catalogo-title" className="font-heading font-extrabold text-3xl lg:text-4xl mb-1">
-                  Catálogo Mayorista
+                <span className="font-heading font-medium text-sm text-primary uppercase tracking-wider mb-3 block">Catálogo</span>
+                <h2 id="catalogo-title" className="font-heading font-bold leading-tight tracking-[-0.01em] text-[clamp(1.875rem,3vw,2.5rem)] text-foreground">
+                  Nuestro
+                  <br />
+                  <span className="text-primary">catálogo mayorista</span>
                 </h2>
-                <p className="text-muted-foreground text-base lg:text-lg">
-                  Explorá nuestro surtido y consultá precios por WhatsApp
-                </p>
               </div>
+              <p className="font-body text-base leading-relaxed max-w-[330px] text-muted-foreground">
+                Explorá el surtido, filtrá por categoría y pedí precio por WhatsApp.
+              </p>
+            </div>
+          </MotionSection>
+
+          <MotionSection variant="itemFast">
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
               <div className="flex flex-wrap gap-3">
                 <FilterButtons
                   categories={categories}
@@ -143,50 +150,32 @@ export function Catalog({ products, categories, initialCategory = "Todos", initi
               </div>
             </div>
           </MotionSection>
-        </SectionReveal>
 
-        {hasActiveFilters && (
-          <div className="mb-6 flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              Mostrando <strong>{filteredProducts.length}</strong> de <strong>{products.length}</strong> productos
-            </p>
-            <Button variant="ghost" size="sm" onClick={clearFilters}>
-              <X className="h-4 w-4 mr-1" />
-              Limpiar filtros
-            </Button>
-          </div>
-        )}
-
-        {isLoading ? (
-          <ProductGridSkeleton count={4} />
-        ) : filteredProducts.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground text-lg mb-4">No se encontraron productos</p>
-            <p className="text-sm text-muted-foreground">Probá con otros filtros o términos de búsqueda</p>
-          </div>
-        ) : (
-          <LayoutGroup>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" role="list" aria-label="Productos del catálogo">
-              <AnimatePresence mode="popLayout">
-                {filteredProducts.map((product, index) => (
-                  <motion.div
-                    key={product.id}
-                    layout
-                    role="listitem"
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                    style={{ transitionDelay: `${Math.min(index * 30, 150)}ms` }}
-                  >
-                    <ProductCard product={product} />
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+          {hasActiveFilters && (
+            <div className="mb-6 flex items-center justify-between font-body text-sm text-muted-foreground">
+              <span>Mostrando <strong>{filteredProducts.length}</strong> de <strong>{products.length}</strong> productos</span>
+              <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2">
+                <X className="h-4 w-4" />
+                Limpiar filtros
+              </Button>
             </div>
-          </LayoutGroup>
-        )}
+          )}
 
+          {isLoading ? (
+            <ProductGridSkeleton count={6} />
+          ) : filteredProducts.length === 0 ? (
+            <div className="text-center py-16 bg-card border border-border rounded-lg">
+              <p className="font-heading font-semibold text-foreground mb-2">No se encontraron productos</p>
+              <p className="font-body text-sm text-muted-foreground">Probá con otros filtros o términos de búsqueda</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" role="list" aria-label="Productos del catálogo">
+              {filteredProducts.map((product, index) => (
+                <ProductCard key={product.id} product={product} index={index} />
+              ))}
+            </div>
+          )}
+        </SectionReveal>
       </div>
     </section>
   );

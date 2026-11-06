@@ -9,6 +9,7 @@ import type { Product, ProductImage } from "@/types";
 
 interface ProductCardProps {
   product: Product;
+  index?: number;
 }
 
 function getImageUrl(image: ProductImage | undefined): string | null {
@@ -24,6 +25,10 @@ export function ProductCard({ product }: ProductCardProps) {
   const imageUrl = getImageUrl(product.images?.[0]);
   const tag = product.tags?.[0];
   const brandName = typeof product.brand === "string" ? product.brand : product.brand?.name || "General";
+  const hasDiscount = product.priceType === "fijo" && product.fixedPrice != null && product.originalPrice != null && product.originalPrice > product.fixedPrice;
+  const discountPercent = hasDiscount && product.originalPrice != null && product.fixedPrice != null
+    ? Math.round(((product.originalPrice - product.fixedPrice) / product.originalPrice) * 100)
+    : 0;
 
   const handleClick = () => {
     analytics.productView({
@@ -41,30 +46,31 @@ export function ProductCard({ product }: ProductCardProps) {
       <article
         className={cn(
           "product-card h-full flex flex-col",
-          "overflow-hidden border border-border rounded-[var(--radius)] bg-card",
+          "bg-white border border-slate-200 rounded-lg shadow-sm",
           "transition-all duration-200",
-          "hover:-translate-y-1 hover:shadow-brand"
+          "hover:border-primary hover:shadow-md"
         )}
       >
-        <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+        {/* Image Container */}
+        <div className="relative aspect-square overflow-hidden bg-slate-50 border-b border-slate-200 p-4">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={product.images?.[0]?.alt || `${product.name} - ${product.detail || "producto"}`}
               fill
-              sizes="(max-width: 640px) 50vw, (max-width: 920px) 25vw, 25vw"
-              className="object-cover transition-transform duration-350 group-hover:scale-[1.045] will-change-transform"
+              sizes="(max-width: 640px) 50vw, (max-width: 920px) 25vw, 20vw"
+              className="object-contain transition-transform duration-300 group-hover:scale-105 will-change-transform"
               loading="lazy"
               placeholder="blur"
               blurDataURL={blurDataUrl}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-muted animate-shimmer" aria-hidden="true">
-              <svg 
+            <div className="w-full h-full flex items-center justify-center bg-slate-50" aria-hidden="true">
+              <svg
                 data-testid="product-placeholder"
-                className="w-12 h-12 text-muted-foreground/20" 
-                fill="none" 
-                stroke="currentColor" 
+                className="w-16 h-16 text-slate-300"
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >
@@ -72,50 +78,42 @@ export function ProductCard({ product }: ProductCardProps) {
               </svg>
             </div>
           )}
-          {tag && (
-            <Badge variant="tag" className="absolute left-3 top-3 z-10 text-[10px] px-2 py-1 radius-nested">
-              {tag}
-            </Badge>
-          )}
+
+          
         </div>
 
+        {/* Product Info */}
         <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-          <div className="space-y-1">
-            <div className="flex items-center justify-between">
-              <p className="text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground">
-                {brandName}
-              </p>
-              <span className="text-[10px] font-bold text-muted-foreground">
-                REF: {product.id.slice(0, 6).toUpperCase()}
-              </span>
-            </div>
+          <div className="space-y-2">
+            {/* Category */}
+            <span className="font-body text-xs text-slate-500 font-medium uppercase tracking-wider">
+              {product.category}
+            </span>
 
-            <h3 className="text-sm leading-snug line-clamp-2 font-bold group-hover:text-[var(--coral-dark)] transition-colors">
+            {/* Product Name */}
+            <h3 className="font-body text-base font-semibold text-slate-900 leading-snug line-clamp-2 group-hover:text-primary transition-colors">
               {product.name}
             </h3>
 
-            <div className="flex items-center gap-1.5 pt-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--lime)] animate-pulse" />
-              <p className="text-[11px] font-medium text-muted-foreground">
-                {product.detail || "Presentación mayorista"}
-              </p>
+            {/* Brand & Detail */}
+            <div className="flex items-center justify-between font-body text-sm text-slate-500 gap-2">
+              <span className="truncate">{brandName}</span>
+              {product.detail && (
+                <span className="font-medium shrink-0">{product.detail}</span>
+              )}
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-2 pt-3 border-t border-border">
-            <div className="flex flex-col">
-              <span className="text-[10px] text-muted-foreground font-bold uppercase leading-none mb-1">
-                Precio Lista
-              </span>
-              <span className="text-sm font-black text-foreground tracking-tight">
-                {product.priceType === "fijo" && product.fixedPrice
+          {/* Price - Consultar por WhatsApp */}
+          <div className="pt-3 border-t border-slate-200">
+            <div className="flex items-center justify-between">
+              <span className="font-heading text-lg font-bold text-slate-900">
+                {product.priceType === "fijo" && product.fixedPrice != null
                   ? `$${product.fixedPrice.toLocaleString("es-AR")}`
-                  : "Consultar"}
+                  : "Consultar precio"}
               </span>
             </div>
-            <div className="bg-muted px-2 py-1 rounded-sm group-hover:bg-[var(--coral-dark)] group-hover:text-white transition-colors">
-              <span className="text-[10px] font-bold uppercase">Ver más</span>
-            </div>
+            <p className="font-body text-xs text-slate-500 mt-1">Precio mayorista</p>
           </div>
         </div>
       </article>

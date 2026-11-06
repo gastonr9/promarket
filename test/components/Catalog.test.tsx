@@ -68,7 +68,8 @@ describe("Catalog", () => {
 
   it("renders catalog title", () => {
     render(<Catalog products={mockProducts} categories={mockCategories} />);
-    expect(screen.getByText("Catálogo Mayorista")).toBeInTheDocument();
+    expect(screen.getByText("Nuestro")).toBeInTheDocument();
+    expect(screen.getByText("catálogo mayorista")).toBeInTheDocument();
   });
 
   it("renders all products initially", () => {

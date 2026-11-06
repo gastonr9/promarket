@@ -44,6 +44,7 @@ export interface Product {
   detail?: string; // "Botella · 2,25 L"
   priceType: PriceType;
   fixedPrice?: number; // Only when priceType === "fijo"
+  originalPrice?: number; // Original price for discount calculation
   tags?: ProductTag[];
   images?: ProductImage[];
   active: boolean;
@@ -76,6 +77,8 @@ export interface Settings {
   heroImage?: ProductImage;
   heroTitle?: string;
   heroSubtitle?: string;
+  email?: string;
+  address?: string;
   // Admin authentication
   adminEmail?: string;
   adminPasswordHash?: string;

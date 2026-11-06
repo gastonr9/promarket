@@ -8,15 +8,15 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Skeleton({ className, variant = "text", ...props }: SkeletonProps) {
   const variants = {
-    text: "h-4 w-full rounded-[var(--radius-sm)]",
+    text: "h-3 w-full rounded-none",
     circular: "rounded-full",
-    rectangular: "rounded-[var(--radius)]",
+    rectangular: "rounded-none",
   };
 
   return (
     <div
       className={cn(
-        "animate-pulse bg-muted",
+        "animate-pulse bg-slate-200",
         variants[variant],
         className
       )}
@@ -27,15 +27,15 @@ export function Skeleton({ className, variant = "text", ...props }: SkeletonProp
 
 export function ProductCardSkeleton() {
   return (
-    <article className="product-card-skeleton">
-      <div className="aspect-[4/3] w-full bg-muted rounded-t-[var(--radius)]" />
+    <article className="product-card-skeleton border border-slate-200 rounded-none overflow-hidden bg-white">
+      <div className="aspect-square w-full bg-slate-100" />
       <div className="p-4 space-y-3">
-        <Skeleton className="h-3 w-1/4" variant="text" />
-        <Skeleton className="h-4 w-3/4" variant="text" />
+        <Skeleton className="h-3 w-1/3" variant="text" />
+        <Skeleton className="h-4 w-2/3" variant="text" />
         <Skeleton className="h-4 w-1/2" variant="text" />
-        <div className="flex items-center justify-between pt-3 border-t border-border">
-          <Skeleton className="h-3 w-20" variant="text" />
-          <Skeleton className="h-9 w-28" variant="rectangular" />
+        <div className="flex items-center justify-between pt-3 border-t border-slate-200">
+          <Skeleton className="h-3 w-16" variant="text" />
+          <Skeleton className="h-10 w-24" variant="rectangular" />
         </div>
       </div>
     </article>
@@ -44,7 +44,7 @@ export function ProductCardSkeleton() {
 
 export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
   return (
-    <div className="product-grid" role="status" aria-label="Cargando productos">
+    <div className="product-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" role="status" aria-label="Cargando productos">
       {Array.from({ length: count }).map((_, i) => (
         <ProductCardSkeleton key={i} />
       ))}

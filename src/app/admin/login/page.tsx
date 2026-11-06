@@ -4,7 +4,7 @@ import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Loader2, AlertCircle, Lock } from "lucide-react";
+import { Eye, EyeOff, Loader2, AlertCircle, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -72,7 +72,7 @@ function AdminLoginForm() {
             <CardDescription>Use sus credenciales de administrador</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {formError && (
                 <div className={cn(
                   "flex items-center gap-2 p-3 rounded-lg text-sm",
@@ -83,60 +83,42 @@ function AdminLoginForm() {
                 </div>
               )}
 
-              <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium text-foreground">
-                  Email
-                </label>
-                <div className="relative">
-                  <Input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="admin@promarket.com.ar"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    disabled={isLoading}
-                    className="pl-10"
-                  />
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true">
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 00-9 9v1.5a2.5 2.5 0 005 0z" />
-                    </svg>
-                  </span>
-                </div>
-              </div>
+              <Input
+                id="email"
+                type="email"
+                label="Email"
+                autoComplete="email"
+                placeholder="admin@promarket.com.ar"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+                startIcon={<Mail className="h-5 w-5" />}
+              />
 
-              <div className="space-y-2">
-                <label htmlFor="password" className="block text-sm font-medium text-foreground">
-                  Contraseña
-                </label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="current-password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={isLoading}
-                    className="pl-10 pr-10"
-                  />
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true">
-                    <Lock className="h-5 w-5" />
-                  </span>
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                label="Contraseña"
+                autoComplete="current-password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={isLoading}
+                startIcon={<Lock className="h-5 w-5" />}
+                endIcon={
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                     aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                     aria-hidden="true"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
-                </div>
-              </div>
+                }
+              />
 
               <Button
                 type="submit"
@@ -153,13 +135,13 @@ function AdminLoginForm() {
                   "Iniciar sesión"
                 )}
               </Button>
-            </form>
 
-            <div className="mt-6 pt-6 border-t border-border">
-              <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                ← Volver al sitio público
-              </Link>
-            </div>
+              <div className="mt-6 pt-6 border-t border-border">
+                <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  ← Volver al sitio público
+                </Link>
+              </div>
+            </form>
           </CardContent>
         </Card>
 

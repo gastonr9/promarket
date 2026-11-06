@@ -4,25 +4,27 @@ import type { Product, Category, Brand, Settings } from "@/types";
 
 const DATA_FILE = path.join(process.cwd(), "src", "data", "products.json");
 
-export interface LocalData {
-  products: Product[];
-  categories: Category[];
-  brands: Brand[];
-  settings: Settings;
-}
-
 // Helper to read data from JSON file
 export function readData(): LocalData {
   try {
     if (fs.existsSync(DATA_FILE)) {
       const fileContent = fs.readFileSync(DATA_FILE, "utf-8");
       const data = JSON.parse(fileContent);
+      
       // Admin credentials from environment variables
-      if (process.env.ADMIN_EMAIL) {
-        data.settings.adminEmail = process.env.ADMIN_EMAIL;
+      const adminEmail = process.env.ADMIN_EMAIL;
+      const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+
+      console.log("[DATA] Module loaded - adminEmail:", adminEmail ? "SET" : "NOT SET");
+      console.log("[DATA] Module loaded - adminPasswordHash:", adminPasswordHash ? "SET" : "NOT SET");
+
+      if (adminEmail) {
+        data.settings.adminEmail = adminEmail;
+        console.log("[DATA] Applied adminEmail from env");
       }
-      if (process.env.ADMIN_PASSWORD_HASH) {
-        data.settings.adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+      if (adminPasswordHash) {
+        data.settings.adminPasswordHash = adminPasswordHash;
+        console.log("[DATA] Applied adminPasswordHash from env");
       }
       return data;
     }
