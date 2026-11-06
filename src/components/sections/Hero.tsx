@@ -21,10 +21,6 @@ export function Hero({ subtitle, heroImage, announcementText }: HeroProps) {
         </div>
       )}
 
-      {heroImage && (
-        <link rel="preload" as="image" href={heroImage} fetchPriority="high" />
-      )}
-
       <section className="hero relative overflow-hidden bg-primary text-white" id="inicio" aria-labelledby="hero-title">
         <div className="wrap mx-auto px-6 lg:px-8">
           <div className="hero-grid grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center min-h-[500px] py-16 lg:py-24 xl:py-32">
@@ -86,7 +82,7 @@ export function Hero({ subtitle, heroImage, announcementText }: HeroProps) {
 
             <div className="hero-visual relative">
               {heroImage ? (
-                <div className="relative rounded-lg overflow-hidden bg-white shadow-lg">
+                <div className="relative rounded-lg overflow-hidden bg-white shadow-lg aspect-[7/6]">
                   <Image
                     src={heroImage}
                     alt="Centro de distribución ProMarket con montacargas y pallets"
@@ -94,9 +90,6 @@ export function Hero({ subtitle, heroImage, announcementText }: HeroProps) {
                     priority
                     className="object-cover"
                     sizes="(max-width: 920px) 100vw, 50vw"
-                    fetchPriority="high"
-                    width={700}
-                    height={600}
                   />
                 </div>
               ) : (
