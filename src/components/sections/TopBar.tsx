@@ -41,7 +41,11 @@ export function TopBar({
       <div className="wrap mx-auto px-4 lg:px-8">
         <div className="flex flex-col gap-2 py-2 text-sm font-body sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-slate-700">
-            <a href={`tel:${whatsappNumber.replace(/\s/g, '')}`} className="flex items-center gap-1 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            <a 
+              href={`tel:${whatsappNumber.replace(/\s/g, '')}`} 
+              aria-label={`Llamar por WhatsApp al ${whatsappNumber}`}
+              className="flex items-center gap-1 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
               <Phone className="h-4 w-4" aria-hidden="true" />
               <span className="hidden sm:inline">{whatsappNumber}</span>
             </a>
@@ -49,7 +53,11 @@ export function TopBar({
               <MapPin className="h-4 w-4" aria-hidden="true" />
               {address}
             </span>
-            <a href={`mailto:${email}`} className="flex items-center gap-1 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            <a 
+              href={`mailto:${email}`} 
+              aria-label={`Enviar correo a ${email}`}
+              className="flex items-center gap-1 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
               <Mail className="h-4 w-4" aria-hidden="true" />
               <span className="hidden lg:inline">{email}</span>
             </a>
