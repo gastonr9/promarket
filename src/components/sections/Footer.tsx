@@ -144,13 +144,21 @@ export function Footer({
             <ul className="space-y-3 font-body text-sm text-slate-300">
               <li className="flex items-start gap-3">
                 <Phone className="h-5 w-5 flex-shrink-0 text-primary mt-0.5" aria-hidden="true" />
-                <a href={`tel:${whatsappNumber.replace(/\s/g, '')}`} className="hover:text-white transition-colors">
+                <a 
+                  href={`tel:${whatsappNumber.replace(/\s/g, '')}`}
+                  aria-label={`Llamar por WhatsApp al ${whatsappNumber}`}
+                  className="hover:text-white transition-colors"
+                >
                   {whatsappNumber}
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="h-5 w-5 flex-shrink-0 text-primary mt-0.5" aria-hidden="true" />
-                <a href={`mailto:${email}`} className="hover:text-white transition-colors">
+                <a 
+                  href={`mailto:${email}`}
+                  aria-label={`Enviar correo a ${email}`}
+                  className="hover:text-white transition-colors"
+                >
                   {email}
                 </a>
               </li>
