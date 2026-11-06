@@ -42,7 +42,12 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Link href={`/catalogo/${product.slug}`} className="block group" onClick={handleClick}>
+    <Link
+      href={`/catalogo/${product.slug}`}
+      className="block group"
+      onClick={handleClick}
+      aria-label={`Ver detalles de ${product.name}${product.detail ? ` (${product.detail})` : ""} - ${product.category}`}
+    >
       <article
         className={cn(
           "product-card h-full flex flex-col",
@@ -79,7 +84,13 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
 
-          
+          {tag && (
+            <div className="absolute top-2 left-2 z-10">
+              <Badge variant="secondary" className="bg-primary text-white font-heading font-bold uppercase tracking-wider text-[10px] px-2 py-0.5 shadow-sm">
+                {tag}
+              </Badge>
+            </div>
+          )}
         </div>
 
         {/* Product Info */}

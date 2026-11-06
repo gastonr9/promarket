@@ -25,10 +25,10 @@ export function NavBar({ activeSection }: NavBarProps) {
               <Link
                 href={item.href}
                 role="menuitem"
-                className={`px-2 py-2 font-body text-sm font-medium transition-colors ${
+                className={`px-2 py-2 font-body text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                   activeSection === item.href.replace('#', '')
                     ? "text-primary"
-                    : "text-slate-600 hover:text-primary"
+                    : "text-slate-700 hover:text-primary"
                 }`}
                 aria-current={activeSection === item.href.replace('#', '') ? "page" : undefined}
               >

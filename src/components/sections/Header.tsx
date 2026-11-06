@@ -102,9 +102,9 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(({
                 </button>
                 
                 {isCategoryOpen && (
-                  <ul className="absolute left-0 top-full z-50 w-56 md:w-64 bg-white border border-slate-200 rounded-md shadow-lg overflow-hidden animate-in fade-in-0 zoom-in-95 duration-150">
+                  <ul className="absolute left-0 top-full z-50 w-56 md:w-64 bg-white border border-slate-200 rounded-md shadow-lg overflow-hidden animate-in fade-in-0 zoom-in-95 duration-150" role="listbox" aria-label="Categorías disponibles">
                     {allCategories.map((cat) => (
-                      <li key={cat.slug}>
+                      <li key={cat.slug} role="presentation">
                         <button
                           type="button"
                           onClick={() => {

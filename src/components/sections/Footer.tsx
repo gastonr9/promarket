@@ -91,17 +91,17 @@ export function Footer({
             </p>
             <div className="flex items-center gap-4">
               {socialLinks.instagram && (
-                <a href={socialLinks.instagram} aria-label="Instagram" className="text-slate-400 hover:text-white transition-colors">
+                <a href={socialLinks.instagram} aria-label="Síguenos en Instagram" className="text-slate-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-slate-950">
                   <InstagramIcon />
                 </a>
               )}
               {socialLinks.facebook && (
-                <a href={socialLinks.facebook} aria-label="Facebook" className="text-slate-400 hover:text-white transition-colors">
+                <a href={socialLinks.facebook} aria-label="Síguenos en Facebook" className="text-slate-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-slate-950">
                   <FacebookIcon />
                 </a>
               )}
               {socialLinks.linkedin && (
-                <a href={socialLinks.linkedin} aria-label="LinkedIn" className="text-slate-400 hover:text-white transition-colors">
+                <a href={socialLinks.linkedin} aria-label="Síguenos en LinkedIn" className="text-slate-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-slate-950">
                   <LinkedinIcon />
                 </a>
               )}

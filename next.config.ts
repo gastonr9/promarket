@@ -76,6 +76,25 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Cache static assets for performance
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/:path*.ico",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
 
@@ -102,6 +121,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  
+  // Enable compression
+  compress: true,
 };
 
 export default withBundleAnalyzer(nextConfig);

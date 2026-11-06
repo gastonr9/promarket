@@ -13,8 +13,9 @@ interface TrustStripProps {
 
 export function TrustStrip({ items = defaultItems }: TrustStripProps) {
   return (
-    <section className="trust-strip bg-white border-y border-slate-200 py-12 lg:py-16" aria-label="Nuestros servicios">
+    <section className="trust-strip bg-white border-y border-slate-200 py-12 lg:py-16" aria-labelledby="trust-strip-title">
       <SectionReveal className="wrap mx-auto px-6 lg:px-8">
+        <h2 id="trust-strip-title" className="sr-only">Nuestros servicios</h2>
         <div className="trust-items grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {items.map((item, index) => (
             <MotionSection key={index} variant="itemFast" style={{ transitionDelay: `${index * 80}ms` }}>

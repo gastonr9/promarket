@@ -171,7 +171,9 @@ export function Catalog({ products, categories, initialCategory = "Todos", initi
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" role="list" aria-label="Productos del catálogo">
               {filteredProducts.map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
+                <div key={product.id} role="listitem">
+                  <ProductCard product={product} index={index} />
+                </div>
               ))}
             </div>
           )}
