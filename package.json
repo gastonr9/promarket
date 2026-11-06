@@ -77,5 +77,13 @@
     "vite": "latest",
     "vitest": "^3.2.7",
     "workbox-build": "^7.4.1"
-  }
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions",
+    "not dead",
+    "not IE 11"
+  ]
 }

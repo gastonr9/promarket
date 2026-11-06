@@ -55,6 +55,17 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
+          // Preconnect hints for critical third-party origins
+          {
+            key: "Link",
+            value: [
+              '<https://fonts.googleapis.com>; rel=preconnect; crossorigin',
+              '<https://fonts.gstatic.com>; rel=preconnect; crossorigin',
+              '<https://cdn.sanity.io>; rel=preconnect',
+              '<https://wa.me>; rel=preconnect',
+              '<https://vitals.vercel-insights.com>; rel=preconnect',
+            ].join(", "),
+          },
         ],
       },
       {
@@ -64,11 +75,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vitals.vercel-insights.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://cdn.sanity.io https://api.sanity.io https://wa.me",
+              "connect-src 'self' https://cdn.sanity.io https://api.sanity.io https://wa.me https://vitals.vercel-insights.com",
               "frame-src https://wa.me",
               "base-uri 'self'",
               "form-action 'self' https://wa.me",

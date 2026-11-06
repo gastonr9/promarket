@@ -127,6 +127,14 @@ export default function RootLayout({
   return (
     <html lang="es-AR" className={`${spaceGrotesk.variable} ${workSans.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
+        {/* Preconnect hints for critical third-party origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.sanity.io" />
+        <link rel="preconnect" href="https://wa.me" />
+        <link rel="preconnect" href="https://vitals.vercel-insights.com" />
+        <link rel="dns-prefetch" href="https://picsum.photos" />
+        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
