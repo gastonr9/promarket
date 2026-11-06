@@ -476,10 +476,32 @@ function AdminProductsPageContent() {
             <p className="text-muted-foreground mt-1">Gestioná el catálogo mayorista</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={async () => {
-              const { exportProductsToPDF } = await import("@/lib/exportPdf");
-              exportProductsToPDF(products);
-            }} className="gap-2">
+            <Button
+              variant="outline"
+              onClick={async () => {
+                try {
+                  const response = await fetch("/api/admin/products/export-pdf", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ products }),
+                  });
+                  if (!response.ok) throw new Error("Failed to generate PDF");
+                  const blob = await response.blob();
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `Catalogo_Promarket_${new Date().toISOString().split("T")[0]}.pdf`;
+                  document.body.appendChild(a);
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                  document.body.removeChild(a);
+                } catch (error) {
+                  console.error("PDF export failed:", error);
+                  showToast("No se pudo generar el PDF", "error");
+                }
+              }}
+              className="gap-2"
+            >
               <FileText className="h-4 w-4" />
               Exportar PDF
             </Button>
