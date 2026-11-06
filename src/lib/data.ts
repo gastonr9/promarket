@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import type { Product, Category, Brand, Settings } from "@/types";
+import type { Product, Category, Brand, Settings, LocalData } from "@/types";
 
 const DATA_FILE = path.join(process.cwd(), "src", "data", "products.json");
 
@@ -60,12 +60,12 @@ export function writeData(data: LocalData): boolean {
 // Data access functions (replacing Sanity fetchers)
 export async function getProducts(): Promise<Product[]> {
   const data = readData();
-  return data.products.filter((p) => p.active !== false);
+  return data.products.filter((p: Product) => p.active !== false);
 }
 
 export async function getCategories(): Promise<Category[]> {
   const data = readData();
-  return data.categories.filter((c) => c.active !== false).sort((a, b) => a.order - b.order);
+  return data.categories.filter((c: Category) => c.active !== false).sort((a: Category, b: Category) => a.order - b.order);
 }
 
 export async function getSettings(): Promise<Settings> {
@@ -80,7 +80,7 @@ export async function getBrands(): Promise<Brand[]> {
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const data = readData();
-  const product = data.products.find((p) => p.slug === slug && p.active !== false);
+  const product = data.products.find((p: Product) => p.slug === slug && p.active !== false);
   return product || null;
 }
 
@@ -91,8 +91,8 @@ export async function getCatalogData(): Promise<{
 }> {
   const data = readData();
   return {
-    products: data.products.filter((p) => p.active !== false),
-    categories: data.categories.filter((c) => c.active !== false).sort((a, b) => a.order - b.order),
+    products: data.products.filter((p: Product) => p.active !== false),
+    categories: data.categories.filter((c: Category) => c.active !== false).sort((a: Category, b: Category) => a.order - b.order),
     settings: data.settings,
   };
 }

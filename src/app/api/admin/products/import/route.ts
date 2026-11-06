@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { readData, writeData } from "@/lib/data";
-import type { Product } from "@/types";
+import type { Product, Category, Brand } from "@/types";
 
 interface ImportRow {
   name?: string;
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         const slug = imp.slug ? String(imp.slug).slice(0, 200) : name.toLowerCase().replace(/\s+/g, "-");
 
         // Find or create category
-        let category = dbData.categories.find((c) => c.name.toLowerCase() === categoryName.toLowerCase());
+        let category = dbData.categories.find((c: Category) => c.name.toLowerCase() === categoryName.toLowerCase());
         if (!category) {
           category = {
             id: crypto.randomUUID(),
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Find or create brand
-        let brand = dbData.brands.find((b) => b.name.toLowerCase() === brandName.toLowerCase());
+        let brand = dbData.brands.find((b: Brand) => b.name.toLowerCase() === brandName.toLowerCase());
         if (!brand) {
           brand = {
             id: crypto.randomUUID(),
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
           dbData.brands.push(brand);
         }
 
-        const existingIndex = dbData.products.findIndex((p) => p.slug === slug);
+        const existingIndex = dbData.products.findIndex((p: Product) => p.slug === slug);
 
         const product = {
           id: existingIndex >= 0 ? dbData.products[existingIndex].id : crypto.randomUUID(),

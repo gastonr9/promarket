@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { readData, writeData } from "@/lib/data";
 import { productSchema, categorySchema, settingsSchema } from "@/lib/validation";
+import type { Product, Category, Brand } from "@/types";
 
 export async function GET() {
   try {
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
         if (!validation.success) {
           return NextResponse.json({ error: "Datos inválidos", details: validation.error.flatten() }, { status: 400 });
         }
-        const index = data.products.findIndex((p) => p.id === product.id);
+        const index = data.products.findIndex((p: Product) => p.id === product.id);
         if (index === -1) {
           return NextResponse.json({ error: "Producto no encontrado" }, { status: 404 });
         }
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
         if (!id || typeof id !== "string") {
           return NextResponse.json({ error: "ID requerido" }, { status: 400 });
         }
-        data.products = data.products.filter((p) => p.id !== id);
+        data.products = data.products.filter((p: Product) => p.id !== id);
         writeData(data);
         return NextResponse.json({ success: true });
       }
@@ -113,7 +114,7 @@ export async function POST(request: NextRequest) {
         if (!validation.success) {
           return NextResponse.json({ error: "Datos inválidos", details: validation.error.flatten() }, { status: 400 });
         }
-        const index = data.categories.findIndex((c) => c.id === category.id);
+        const index = data.categories.findIndex((c: Category) => c.id === category.id);
         if (index === -1) {
           return NextResponse.json({ error: "Categoría no encontrada" }, { status: 404 });
         }
@@ -127,7 +128,7 @@ export async function POST(request: NextRequest) {
         if (!id || typeof id !== "string") {
           return NextResponse.json({ error: "ID requerido" }, { status: 400 });
         }
-        data.categories = data.categories.filter((c) => c.id !== id);
+        data.categories = data.categories.filter((c: Category) => c.id !== id);
         writeData(data);
         return NextResponse.json({ success: true });
       }
@@ -201,7 +202,7 @@ export async function POST(request: NextRequest) {
             const slug = imp.slug ? String(imp.slug).slice(0, 200) : name.toLowerCase().replace(/\s+/g, "-");
 
             // Find or create category
-            let category = data.categories.find((c) => c.name.toLowerCase() === categoryName.toLowerCase());
+            let category = data.categories.find((c: Category) => c.name.toLowerCase() === categoryName.toLowerCase());
             if (!category) {
               category = {
                 id: crypto.randomUUID(),
@@ -215,7 +216,7 @@ export async function POST(request: NextRequest) {
             }
 
             // Find or create brand
-            let brand = data.brands.find((b) => b.name.toLowerCase() === brandName.toLowerCase());
+            let brand = data.brands.find((b: Brand) => b.name.toLowerCase() === brandName.toLowerCase());
             if (!brand) {
               brand = {
                 id: crypto.randomUUID(),
@@ -226,7 +227,7 @@ export async function POST(request: NextRequest) {
               data.brands.push(brand);
             }
 
-            const existingIndex = data.products.findIndex((p) => p.slug === slug);
+            const existingIndex = data.products.findIndex((p: Product) => p.slug === slug);
 
             const product = {
               id: existingIndex >= 0 ? data.products[existingIndex].id : crypto.randomUUID(),

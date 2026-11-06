@@ -84,6 +84,13 @@ export interface Settings {
   adminPasswordHash?: string;
 }
 
+export interface LocalData {
+  products: Product[];
+  categories: Category[];
+  brands: Brand[];
+  settings: Settings;
+}
+
 // UI State types
 export interface CatalogFilters {
   category: ProductCategory | "Todos";
