@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -32,12 +31,24 @@ interface Command {
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   useSession(); // Required for signOut to work
+
+  // Handle closing with exit animation
+  const handleClose = useCallback(() => {
+    setIsExiting(true);
+    setQuery("");
+    // Wait for exit animation to complete
+    setTimeout(() => {
+      setIsOpen(false);
+      setIsExiting(false);
+    }, 150);
+  }, []);
 
   // Build commands list
   const allCommands = useMemo((): Command[] => {
@@ -168,13 +179,12 @@ export function CommandPalette() {
       // Close with Escape
       if (e.key === "Escape" && isOpen) {
         e.preventDefault();
-        setIsOpen(false);
-        setQuery("");
+        handleClose();
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, handleClose]);
 
   // Focus input when opened
   useEffect(() => {
@@ -202,20 +212,18 @@ export function CommandPalette() {
           e.preventDefault();
           if (filteredCommands[selectedIndex]) {
             filteredCommands[selectedIndex].action();
-            setIsOpen(false);
-            setQuery("");
+            handleClose();
           }
           break;
         case "Escape":
           e.preventDefault();
-          setIsOpen(false);
-          setQuery("");
+          handleClose();
           break;
         default:
           break;
       }
     },
-    [filteredCommands, selectedIndex]
+    [filteredCommands, selectedIndex, handleClose]
   );
 
   // Scroll selected item into view
@@ -228,34 +236,23 @@ export function CommandPalette() {
   const executeCommand = (cmd: Command) => {
     analytics.commandPaletteExecute(cmd.id, cmd.label, cmd.section);
     cmd.action();
-    setIsOpen(false);
-    setQuery("");
+    handleClose();
   };
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
-            className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => {
-              setIsOpen(false);
-              setQuery("");
-            }}
+          <div
+            className={cn("fixed inset-0 z-50 bg-black/30 backdrop-blur-sm palette-backdrop", isExiting ? "palette-exiting" : "palette-enter")}
+            onClick={handleClose}
             aria-hidden="true"
           />
 
           {/* Palette */}
-          <motion.div
-            className="fixed left-1/2 top-20 z-[60] w-full max-w-2xl -translate-x-1/2 pointer-events-auto"
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.15, ease: [0.4, 0, 0.2, 1] }}
+          <div
+            className={cn("fixed left-1/2 top-20 z-[60] w-full max-w-2xl -translate-x-1/2 pointer-events-auto palette-container", isExiting ? "palette-exiting" : "palette-enter")}
             role="dialog"
             aria-modal="true"
             aria-label="Paleta de comandos"
@@ -367,9 +364,9 @@ export function CommandPalette() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </>
       )}
-    </AnimatePresence>
+    </>
   );
 }

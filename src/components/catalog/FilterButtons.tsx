@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import type { Category } from "@/types";
-import { motion } from "framer-motion";
 
 interface FilterButtonsProps {
   categories: Category[];
@@ -26,21 +25,20 @@ export function FilterButtons({ categories, selectedCategory, onCategoryChange }
       aria-label="Filtrar productos por categoría"
     >
       {allCategories.map((category) => (
-        <motion.button
+        <button
           key={category.slug}
           onClick={() => onCategoryChange(category.slug)}
           aria-pressed={selectedCategory === category.slug}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
           className={cn(
             "h-11 px-4 text-sm font-heading font-bold uppercase tracking-wider rounded-md border transition-all duration-150",
+            "active:scale-[0.98] hover:scale-[1.02]",
             selectedCategory === category.slug
               ? "bg-primary border-primary text-primary-foreground hover:bg-primary-hover"
               : "bg-background border-border text-foreground hover:border-primary hover:text-primary hover:bg-muted"
           )}
         >
           {category.name}
-        </motion.button>
+        </button>
       ))}
     </div>
   );

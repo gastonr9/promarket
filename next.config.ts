@@ -12,6 +12,35 @@ const nextConfig: NextConfig = {
   // Fix output file tracing for monorepo setup
   outputFileTracingRoot: __dirname,
   
+  // Minimize polyfills for modern browsers
+  compiler: {
+    // Enable SWC minification (default in Next.js 14+)
+    // Remove console.log in production
+    removeConsole: process.env.NODE_ENV === "production" ? {
+      exclude: ["error", "warn"],
+    } : false,
+  },
+  
+  // Webpack configuration to reduce polyfills for modern browsers
+  webpack: (config, { dev, isServer }) => {
+    // Target modern browsers to reduce polyfills
+    if (!dev && !isServer) {
+      config.target = "web";
+      // Use ES2022 target to avoid unnecessary polyfills
+      config.output.environment = {
+        ...config.output.environment,
+        arrowFunction: true,
+        bigIntLiteral: true,
+        const: true,
+        destructuring: true,
+        dynamicImport: true,
+        forOf: true,
+        module: true,
+      };
+    }
+    return config;
+  },
+  
   images: {
     remotePatterns: [
       {
@@ -55,15 +84,13 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
-          // Preconnect hints for critical third-party origins
+          // DNS prefetch for third-party origins used on specific pages
           {
             key: "Link",
             value: [
-              '<https://fonts.googleapis.com>; rel=preconnect; crossorigin',
-              '<https://fonts.gstatic.com>; rel=preconnect; crossorigin',
-              '<https://cdn.sanity.io>; rel=preconnect',
-              '<https://wa.me>; rel=preconnect',
-              '<https://vitals.vercel-insights.com>; rel=preconnect',
+              '<https://cdn.sanity.io>; rel=dns-prefetch',
+              '<https://wa.me>; rel=dns-prefetch',
+              '<https://vitals.vercel-insights.com>; rel=dns-prefetch',
             ].join(", "),
           },
         ],
@@ -120,7 +147,7 @@ const nextConfig: NextConfig = {
 
   // Performance optimizations
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion"],
+    optimizePackageImports: ["lucide-react"],
   },
 
   // Turbopack config for Tailwind v4

@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "./button";
 import { X, CheckCircle, AlertCircle, Info } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 
 type ToastType = "default" | "success" | "error" | "info";
 
@@ -54,17 +53,15 @@ export function useToast() {
 
 function ToastContainer({ toasts, onHide }: { toasts: Toast[]; onHide: (id: string) => void }) {
   return (
-    <AnimatePresence>
-      <div
-        className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {toasts.map((toast) => (
-          <ToastItem key={toast.id} toast={toast} onHide={onHide} />
-        ))}
-      </div>
-    </AnimatePresence>
+    <div
+      className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {toasts.map((toast) => (
+        <ToastItem key={toast.id} toast={toast} onHide={onHide} />
+      ))}
+    </div>
   );
 }
 
@@ -85,16 +82,35 @@ function ToastItem({ toast, onHide }: { toast: Toast; onHide: (id: string) => vo
     info: "bg-[var(--blue)] text-white",
   };
 
+  // Use ref to trigger CSS animation
+  const toastRef = React.useRef<HTMLDivElement>(null);
+  
+  React.useEffect(() => {
+    const element = toastRef.current;
+    if (!element) return;
+    
+    // Trigger enter animation
+    requestAnimationFrame(() => {
+      element.classList.add("toast-enter");
+    });
+    
+    // Auto-hide after duration
+    const timer = setTimeout(() => {
+      element.classList.add("toast-exit");
+      setTimeout(() => onHide(toast.id), 300);
+    }, toast.duration);
+    
+    return () => clearTimeout(timer);
+  }, [toast.id, toast.duration, onHide]);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -20, scale: 0.95 }}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+    <div
+      ref={toastRef}
       className={cn(
         "flex items-start gap-3 p-4 rounded-[var(--radius)] shadow-brand",
         "min-w-[280px] max-w-[380px]",
-        typeClasses[toast.type]
+        typeClasses[toast.type],
+        "toast-item"
       )}
       role="alert"
       style={{ pointerEvents: "auto" }}
@@ -105,12 +121,20 @@ function ToastItem({ toast, onHide }: { toast: Toast; onHide: (id: string) => vo
         variant="ghost"
         size="icon"
         className="text-white/70 hover:text-white"
-        onClick={() => onHide(toast.id)}
+        onClick={() => {
+          const element = toastRef.current;
+          if (element) {
+            element.classList.add("toast-exit");
+            setTimeout(() => onHide(toast.id), 300);
+          } else {
+            onHide(toast.id);
+          }
+        }}
         aria-label="Cerrar notificación"
       >
         <X className="h-4 w-4" aria-hidden="true" />
       </Button>
-    </motion.div>
+    </div>
   );
 }
 
