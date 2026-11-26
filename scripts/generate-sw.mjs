@@ -48,7 +48,9 @@ async function generateServiceWorker() {
         },
       },
       {
-        urlPattern: ({ url }) => url.pathname.match(/\.(?:js|css|woff2?)$/),
+        urlPattern: ({ url }) =>
+          !url.pathname.startsWith("/_next/") &&
+          /\.(?:js|css|woff2?)$/.test(url.pathname),
         handler: "StaleWhileRevalidate",
         options: {
           cacheName: "static-resources",
