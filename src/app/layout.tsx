@@ -19,14 +19,15 @@ const workSans = Work_Sans({
   display: "swap",
 });
 
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://promarket.com.ar").replace(/\/+$/, "");
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://promarket.com.ar"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Promarket Logística | El impulso de tu comercio",
     template: "%s | Promarket Logística",
   },
-  description: "Abastecimiento mayorista para kioscos, almacenes y comercios. Consultá nuestro catálogo directamente por WhatsApp.",
-  keywords: ["mayorista", "kioscos", "almacenes", "comercios", "abastecimiento", "logística", "catálogo", "whatsapp"],
+  description: "Catálogo mayorista para kioscos, almacenes y comercios. Consultá precios y disponibilidad.",
   authors: [{ name: "Promarket Logística" }],
   creator: "Promarket Logística",
   publisher: "Promarket Logística",
@@ -44,27 +45,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_AR",
-    url: "https://promarket.com.ar",
+    url: siteUrl,
     siteName: "Promarket Logística",
     title: "Promarket Logística | El impulso de tu comercio",
-    description: "Abastecimiento mayorista para kioscos, almacenes y comercios. Consultá nuestro catálogo directamente por WhatsApp.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Promarket Logística - Catálogo mayorista",
-      },
-    ],
+    description: "Catálogo mayorista para kioscos, almacenes y comercios. Consultá precios y disponibilidad.",
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Promarket Logística",
     description: "Abastecimiento mayorista para kioscos, almacenes y comercios.",
-    images: ["/og-image.jpg"],
-  },
-  verification: {
-    google: "google-site-verification-code",
   },
 };
 
@@ -76,35 +65,13 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://promarket.com.ar";
-
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Promarket Logística",
   alternateName: "Promarket",
   url: siteUrl,
-  logo: `${siteUrl}/logo.png`,
   description: "Distribución y abastecimiento mayorista para kioscos, almacenes y comercios de cercanía.",
-  foundingDate: "2024",
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "AR",
-    addressRegion: "Argentina",
-  },
-  contactPoint: [
-    {
-      "@type": "ContactPoint",
-      telephone: "+5491100000000",
-      contactType: "customer service",
-      availableLanguage: ["Spanish"],
-      areaServed: "AR",
-      contactOption: ["WhatsApp"],
-    },
-  ],
-  sameAs: [
-    "https://wa.me/5491100000000",
-  ],
   knowsAbout: [
     "Distribución mayorista",
     "Abastecimiento para kioscos",

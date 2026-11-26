@@ -159,9 +159,9 @@
   - `/admin/products/page.tsx` — `product_create`, `product_update`, `product_delete`, `import_products`, `pdf_export`
   - `CommandPalette.tsx` — `command_palette_open`, `command_palette_execute`
   - **DONE 2026-10-31**
-- [x] **P-06** A11y audit automatizado: `axe-core` en CI + `eslint-plugin-jsx-a11y`
+- [x] **P-06** A11y audit automatizado: Storybook addon-a11y + `eslint-plugin-jsx-a11y`
   - `eslint.config.mjs` — `eslint-plugin-jsx-a11y` reglas estrictas (error level): anchor-is-valid, click-events-have-key-events, no-noninteractive-element-interactions, role-has-required-aria-props, aria-props, alt-text, heading-has-content, label-has-associated-control, no-redundant-roles, tabindex-no-positive, iframe-has-title, mouse-events-have-key-events, no-static-element-interactions
-  - `package.json` — `axe-core`, `@axe-core/react`, `eslint-plugin-jsx-a11y` como devDependencies
+  - `package.json` — `@storybook/addon-a11y` y `eslint-plugin-jsx-a11y` como devDependencies
   - Fixes aplicados: drag-drop zone → button, CommandPalette options → buttons, Dialog backdrop → button, Label component eslint-disable, effects setState deferred
   - **DONE 2026-10-31**
 
@@ -173,14 +173,14 @@
 - [x] 2026-10-31: Storybook (ST-06) — Design system documentation for Button, Card, Badge, Dialog, Toast (45 stories, 74 automated tests)
 - [x] 2026-10-31: Tests (ST-05) — Vitest (31 unit tests) + Playwright (7 E2E tests) all passing
 - [x] 2026-10-31: Service Worker (ST-04) — Workbox offline-first SW with StaleWhileRevalidate/NetworkFirst/CacheFirst strategies, auto-update checks, production-only registration
-- [x] 2026-10-31: A11y Audit (P-06) — ESLint jsx-a11y strict rules + axe-core, all accessibility errors resolved (interactive elements, keyboard support, labels, roles)
+- [x] 2026-10-31: A11y Audit (P-06) — ESLint jsx-a11y strict rules + Storybook addon-a11y, all accessibility errors resolved (interactive elements, keyboard support, labels, roles)
 - [x] 2026-10-31: Analytics Events (P-05) — Vercel Analytics integration with typed events: product_view, whatsapp_click, filter_use, search_query, category_change, pdf_export, product_create/update/delete, import_products, command_palette_open/execute
 - [x] 2026-10-31: Export PDF (P-04) — Printable wholesale catalog order sheet export module with A4 layout and category grouping
 - [x] 2026-10-31: Command Palette ⌘K (P-03) — Interactive modal floating command menu with navigation shortcuts, live filtering, and keyboard control
 - [x] 2026-10-31: Micro-interacciones (P-01) — Catalog LayoutGroup+AnimatePresence, ProductCard motion, Toast AnimatePresence, FilterButtons motion.button, SearchInput motion.div focus
 - [x] 2026-10-30: Dark mode toggle (P-02) — ThemeProvider, ThemeToggle, enhanced dark palette WCAG AA, localStorage persistence, system preference sync
 - [x] 2026-10-31: Service Worker (ST-04) — Workbox offline-first SW with StaleWhileRevalidate/NetworkFirst/CacheFirst strategies, auto-update checks, production-only registration
-- [x] 2026-10-31: A11y Audit (P-06) — ESLint jsx-a11y strict rules + axe-core, all accessibility errors resolved (interactive elements, keyboard support, labels, roles)
+- [x] 2026-10-31: A11y Audit (P-06) — ESLint jsx-a11y strict rules + Storybook addon-a11y, all accessibility errors resolved (interactive elements, keyboard support, labels, roles)
 - [x] 2026-10-31: Analytics Events (P-05) — Vercel Analytics integration with typed events: product_view, whatsapp_click, filter_use, search_query, category_change, pdf_export, product_create/update/delete, import_products, command_palette_open/execute
 - [x] 2026-10-31: Export PDF (P-04) — Printable wholesale catalog order sheet export module with A4 layout and category grouping
 - [x] 2026-10-31: Command Palette ⌘K (P-03) — Interactive modal floating command menu with navigation shortcuts, live filtering, and keyboard control

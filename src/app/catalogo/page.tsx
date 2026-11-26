@@ -8,6 +8,9 @@ import { Suspense } from "react";
 export const metadata = {
   title: "Catálogo Mayorista | Promarket Logística",
   description: "Explorá nuestro catálogo completo de productos para kioscos, almacenes y comercios. Bebidas, snacks, golosinas y más al por mayor.",
+  alternates: {
+    canonical: "/catalogo",
+  },
 };
 
 // Force dynamic rendering due to searchParams usage (Next.js 15+)

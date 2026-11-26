@@ -22,7 +22,6 @@ Next.js 16 App Router wholesale catalog with admin dashboard, local JSON persist
 ### Installation
 
 ```bash
-cd ProMarket
 npm install
 ```
 
@@ -39,13 +38,6 @@ ADMIN_PASSWORD_HASH=$2b$12$zxmLHXGjb0ZwJgaOJAXYCezJ3aXyJtoULKvPqOb4EeXAv7ej3CFcO
 NEXTAUTH_SECRET=your-super-secret-key-change-in-production
 NEXTAUTH_URL=http://localhost:3000
 ```
-
-### Default Admin Credentials
-
-- **Email**: `admin@promarket.com.ar`
-- **Password**: `admin123`
-
-> ⚠️ **Important**: Change the default password immediately in production!
 
 ### Development
 
@@ -125,7 +117,7 @@ ProMarket/
 │   │   └── ui/                 # Base UI components
 │   ├── lib/
 │   │   ├── auth.ts             # NextAuth configuration
-│   │   ├── sanity/             # Local JSON data layer
+│   │   ├── data.ts             # Local JSON data layer
 │   │   ├── utils.ts            # Classnames utility
 │   │   └── validation.ts       # Zod schemas
 │   ├── middleware.ts           # Route protection + rate limiting

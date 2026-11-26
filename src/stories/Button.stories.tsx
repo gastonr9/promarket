@@ -8,7 +8,7 @@ const meta: Meta<typeof Button> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A versatile button component with multiple variants, sizes, and states. Built on top of @base-ui/react with class-variance-authority for consistent styling.',
+        component: 'A versatile button component with multiple variants, sizes, and states. Built on top of Radix Slot with class-variance-authority for consistent styling.',
       },
     },
   },

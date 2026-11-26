@@ -1,23 +1,66 @@
 "use client";
 
-import { MessageCircle, MapPin, Clock } from "lucide-react";
+import { Mail, MessageCircle, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionReveal, MotionSection } from "@/components/ui/SectionReveal";
 
 interface ContactCardsProps {
-  cards?: Array<{
-    icon: React.ReactNode;
-    title: string;
-    subtitle: string;
-    cta?: {
-      label: string;
-      href: string;
-      variant?: "primary" | "secondary" | "outline" | "ghost" | "destructive" | "light" | "link" | "whatsapp";
-    };
-  }>;
+  whatsappNumber?: string;
+  email?: string;
+  address?: string;
 }
 
-export function ContactCards({ cards = defaultCards }: ContactCardsProps) {
+interface ContactCard {
+  icon: React.ReactNode;
+  title: string;
+  subtitle: string;
+  cta?: {
+    label: string;
+    href: string;
+    variant: "whatsapp" | "outline";
+  };
+}
+
+export function ContactCards({ whatsappNumber, email, address }: ContactCardsProps) {
+  const cleanWhatsappNumber = whatsappNumber?.replace(/\D/g, "");
+  const contactEmail = email?.trim();
+  const contactAddress = address?.trim();
+  const cards: ContactCard[] = [
+    ...(cleanWhatsappNumber
+      ? [{
+          icon: <MessageCircle className="h-7 w-7" aria-hidden="true" />,
+          title: "WhatsApp directo",
+          subtitle: "Consultá precios, stock y disponibilidad de entrega.",
+          cta: {
+            label: "Escribir por WhatsApp",
+            href: `https://wa.me/${cleanWhatsappNumber}`,
+            variant: "whatsapp" as const,
+          },
+        }]
+      : []),
+    ...(contactEmail
+      ? [{
+          icon: <Mail className="h-7 w-7" aria-hidden="true" />,
+          title: "Correo electrónico",
+          subtitle: contactEmail,
+          cta: {
+            label: "Enviar correo",
+            href: `mailto:${contactEmail}`,
+            variant: "outline" as const,
+          },
+        }]
+      : []),
+    ...(contactAddress
+      ? [{
+          icon: <MapPin className="h-7 w-7" aria-hidden="true" />,
+          title: "Ubicación",
+          subtitle: contactAddress,
+        }]
+      : []),
+  ];
+
+  if (cards.length === 0) return null;
+
   return (
     <section id="contacto" className="contact-cards bg-slate-50 py-16 lg:py-24" aria-labelledby="contact-title">
       <div className="wrap mx-auto px-6 lg:px-8">
@@ -32,7 +75,7 @@ export function ContactCards({ cards = defaultCards }: ContactCardsProps) {
           </MotionSection>
 
           <MotionSection variant="itemFast">
-            <div className="cards-grid grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            <div className={`cards-grid grid grid-cols-1 gap-6 lg:gap-8 ${cards.length === 1 ? "mx-auto max-w-md" : cards.length === 2 ? "mx-auto max-w-3xl md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3"}`}>
               {cards.map((card, index) => (
                 <article
                   key={index}
@@ -68,40 +111,3 @@ export function ContactCards({ cards = defaultCards }: ContactCardsProps) {
     </section>
   );
 }
-
-const defaultCards: Array<{
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-  cta?: {
-    label: string;
-    href: string;
-    variant?: "primary" | "secondary" | "outline" | "ghost" | "destructive" | "light" | "link" | "whatsapp";
-  };
-}> = [
-  {
-    icon: <MessageCircle className="h-7 w-7" aria-hidden="true" />,
-    title: "WhatsApp directo",
-    subtitle: "Tu asesor comercial te atiende al instante. Sin bots, sin esperas.",
-    cta: {
-      label: "Escribir por WhatsApp",
-      href: "https://wa.me/5491100000000",
-      variant: "whatsapp",
-    },
-  },
-  {
-    icon: <MapPin className="h-7 w-7" aria-hidden="true" />,
-    title: "Zona de cobertura",
-    subtitle: "Llegamos a CABA, GBA y principales ciudades del interior con logística propia.",
-    cta: {
-      label: "Ver zonas de entrega",
-      href: "#cobertura",
-      variant: "outline",
-    },
-  },
-  {
-    icon: <Clock className="h-7 w-7" aria-hidden="true" />,
-    title: "Horario de atención",
-    subtitle: "Lunes a viernes 8:00-18:00. Sábados 8:00-13:00. Domingos cerrado.",
-  },
-];

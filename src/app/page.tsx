@@ -8,7 +8,10 @@ import { TrustStrip, Catalog, HowItWorks, ContactCards, Footer } from "@/compone
 
 export const metadata = {
   title: "ProMarket Logística | El impulso de tu comercio",
-  description: "Abastecimiento mayorista para kioscos, almacenes y comercios. Catálogo completo con precios mayoristas. Pedí por WhatsApp y coordinamos la entrega.",
+  description: "Abastecimiento mayorista para kioscos, almacenes y comercios. Explorá el catálogo y consultá precios y disponibilidad.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default async function HomePage() {
@@ -50,7 +53,11 @@ export default async function HomePage() {
         <HowItWorks />
 
         {/* Contact Cards - WhatsApp, Zone, Hours (lazy loaded) */}
-        <ContactCards />
+        <ContactCards
+          whatsappNumber={settings.whatsappNumber}
+          email={settings.email}
+          address={settings.address}
+        />
 
         {/* Footer - Naval background (lazy loaded) */}
         <Footer

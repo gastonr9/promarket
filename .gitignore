@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
 
 # next.js
 /.next/
@@ -44,4 +46,13 @@ sanity/
 next-env.d.ts
 
 *storybook.log
+/debug-storybook.log
 storybook-static
+/build.log
+/build-output.txt
+
+# Generated service worker assets
+/public/sw.js
+/public/sw.js.map
+/public/workbox-*.js
+/public/workbox-*.js.map

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProductBySlug, getSettings, getProducts } from "@/lib/data";
+import { getProductBySlug, getProducts, getSettings } from "@/lib/data";
 import { ProductDetail } from "@/components/sections/ProductDetail";
 
 interface PageProps {
@@ -10,8 +10,6 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- intentionally fetched for potential future use (WhatsApp support)
-  const _settings = await getSettings();
 
   if (!product) {
     return {
@@ -21,7 +19,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: product.name,
-    description: product.description || `${product.name} - ${product.detail || "Consultar presentación"}. Consultá precio y disponibilidad por WhatsApp.`,
+    description: product.description || `${product.name} - ${product.detail || "Consultar presentación"}. Consultá precio y disponibilidad.`,
+    alternates: {
+      canonical: `/catalogo/${product.slug}`,
+    },
     openGraph: {
       title: `${product.name} | Promarket Logística`,
       description: product.description || `${product.name} - ${product.detail || "Consultar presentación"}`,
@@ -54,10 +55,7 @@ export const revalidate = 3600; // ISR: revalidate every hour
 
 export default async function ProductPage({ params }: PageProps) {
   const { slug } = await params;
-  const [product, settings] = await Promise.all([
-    getProductBySlug(slug),
-    getSettings(),
-  ]);
+  const [product, settings] = await Promise.all([getProductBySlug(slug), getSettings()]);
 
   if (!product) {
     notFound();

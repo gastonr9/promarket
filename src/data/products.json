@@ -191,24 +191,6 @@
       "images": [],
       "active": true,
       "order": 12
-    },
-    {
-      "name": "Test Product",
-      "slug": "test-product",
-      "category": "Bebidas",
-      "brand": "Marca a definir",
-      "description": "Test description",
-      "detail": "Unidad · 1 L",
-      "priceType": "consultar",
-      "tags": [
-        "Test"
-      ],
-      "images": [],
-      "active": true,
-      "order": 13,
-      "id": "90376849-7661-4066-8f91-e20a03801a26",
-      "createdAt": "2026-10-28T22:17:32.182Z",
-      "updatedAt": "2026-10-28T22:17:32.182Z"
     }
   ],
   "categories": [
