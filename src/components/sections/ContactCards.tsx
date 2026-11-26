@@ -2,7 +2,7 @@
 
 import { MessageCircle, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SectionReveal, MotionSection } from "@/components/ui";
+import { SectionReveal, MotionSection } from "@/components/ui/SectionReveal";
 
 interface ContactCardsProps {
   cards?: Array<{

@@ -185,7 +185,7 @@ function AdminSettingsPageContent() {
             </div>
             <div className="p-4 bg-muted rounded-lg border border-border">
               <p className="text-sm"><strong>Vista previa:</strong></p>
-              <div className="mt-2 px-4 py-2 bg-ink text-white text-center text-sm font-medium rounded">
+              <div className="mt-2 px-4 py-2 bg-slate-900 text-white text-center text-sm font-medium rounded">
                 {settings.announcementText}
               </div>
             </div>
@@ -207,44 +207,40 @@ function AdminSettingsPageContent() {
             
             <div className="space-y-2">
               <Label htmlFor="adminEmail">Email de administrador</Label>
-              <div className="relative">
-                <Input
-                  id="adminEmail"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="admin@promarket.com.ar"
-                  value={settings.adminEmail || ""}
-                  onChange={e => setSettings({...settings, adminEmail: e.target.value})}
-                  required
-                  className="pl-10"
-                />
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
-              </div>
+              <Input
+                id="adminEmail"
+                type="email"
+                autoComplete="email"
+                placeholder="admin@promarket.com.ar"
+                value={settings.adminEmail || ""}
+                onChange={e => setSettings({...settings, adminEmail: e.target.value})}
+                required
+                startIcon={<User className="h-4 w-4" aria-hidden="true" />}
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="adminPassword">Nueva contraseña (dejar vacío para no cambiar)</Label>
-              <div className="relative">
-                <Input
-                  id="adminPassword"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="new-password"
-                  placeholder="•••••••• (mín. 8 caracteres)"
-                  value={newPassword}
-                  onChange={e => setNewPassword(e.target.value)}
-                  className="pl-10 pr-10"
-                  minLength={8}
-                />
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
+              <Input
+                id="adminPassword"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                placeholder="•••••••• (mín. 8 caracteres)"
+                value={newPassword}
+                onChange={e => setNewPassword(e.target.value)}
+                minLength={8}
+                startIcon={<Lock className="h-4 w-4" aria-hidden="true" />}
+                endIcon={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-muted-foreground hover:text-foreground"
+                    aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                }
+              />
               <p className="text-xs text-muted-foreground">
                 La contraseña se hasheará con bcrypt (costo 12) antes de guardarse.
               </p>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Truck, MessageSquare, CheckCircle } from "lucide-react";
-import { SectionReveal, MotionSection } from "@/components/ui";
+import { SectionReveal, MotionSection } from "@/components/ui/SectionReveal";
 
 interface HowItWorksProps {
   steps?: Array<{

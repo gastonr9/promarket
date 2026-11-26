@@ -6,19 +6,21 @@ import { useRef, useEffect, useState } from "react";
  * Hook to detect when element enters viewport
  * Respects prefers-reduced-motion
  */
-export function useInView(options: IntersectionObserverInit = {}) {
+export function useInView(options?: IntersectionObserverInit) {
   const ref = useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(false);
 
+  const threshold = options?.threshold ?? 0.1;
+  const rootMargin = options?.rootMargin ?? "0px 0px -50px 0px";
+
   useEffect(() => {
+    if (isInView) return;
     const element = ref.current;
     if (!element) return;
 
     // Check prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-      // Defer to avoid synchronous state update in effect
-      requestAnimationFrame(() => setIsInView(true));
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setIsInView(true);
       return;
     }
 
@@ -30,15 +32,14 @@ export function useInView(options: IntersectionObserverInit = {}) {
         }
       },
       {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-        ...options,
+        threshold,
+        rootMargin,
       }
     );
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [options]);
+  }, [isInView, threshold, rootMargin]);
 
   return [ref, isInView] as const;
 }

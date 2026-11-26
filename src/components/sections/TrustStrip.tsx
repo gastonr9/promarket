@@ -1,7 +1,7 @@
 "use client";
 
 import { Truck, Tag, MessageSquare, Package } from "lucide-react";
-import { SectionReveal, MotionSection } from "@/components/ui";
+import { SectionReveal, MotionSection } from "@/components/ui/SectionReveal";
 
 interface TrustStripProps {
   items?: Array<{

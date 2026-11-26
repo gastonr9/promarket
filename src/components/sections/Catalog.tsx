@@ -8,7 +8,7 @@ import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { analytics } from "@/lib/analytics";
 import type { Product, Category } from "@/types";
-import { SectionReveal, MotionSection } from "@/components/ui";
+import { SectionReveal, MotionSection } from "@/components/ui/SectionReveal";
 
 interface CatalogProps {
   products: Product[];

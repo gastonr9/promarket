@@ -3,7 +3,7 @@
 import { MessageSquare, MapPin, Clock, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { SectionReveal, MotionSection } from "@/components/ui";
+import { SectionReveal, MotionSection } from "@/components/ui/SectionReveal";
 
 interface ContactBandProps {
   whatsappNumber: string;
